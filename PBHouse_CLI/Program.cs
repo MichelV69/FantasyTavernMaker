@@ -10,27 +10,30 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Thu 22-Aug-2019 @ 23h00 ADT by m.vaillancourt
+     *   Last updated  : Thu 22-Aug-2019 @ 23h25 ADT by m.vaillancourt
      *   
      */
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Console.WriteLine("Hello World!");
 
             PBHouse pbh = new PBHouse();
 
-            for (int loop = 0; loop < 5; loop++)
+            int loop_max = 9;
+
+            for (int loop = 0; loop <= loop_max; loop++)
             {
                 Console.WriteLine($"Name:  {pbh.Name()}");
                 Console.WriteLine($"Current Mood: {pbh.Mood()}");
+                Console.WriteLine($"Lighting Environment: {pbh.Lighting()}");
                 Console.WriteLine("  ");
             } // end-for
 
             // Keep the console window open in debug mode.
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
+            //Console.WriteLine("Press any key to exit.");
+            //Console.ReadKey();
         }
     }
 
@@ -165,7 +168,34 @@ namespace PBHouse_CLI
         // -----
         public string Lighting()
         {
+            // Load a pair of lists with light sources and adjectives, then
+            //   pick one for the PBHouse lighting
 
+            // ... create list
+            List<string> light_sources_list = new List<string> { };
+            List<string> adjectives_list = new List<string> { };
+
+            // ... load lists
+            adjectives_list.Add("brightly");
+            adjectives_list.Add("clearly");
+            adjectives_list.Add("evenly");
+            adjectives_list.Add("dimly");
+            adjectives_list.Add("shadowly");
+
+            light_sources_list.Add("candles");
+            light_sources_list.Add("a fireplace");
+            light_sources_list.Add("oil lamps");
+            light_sources_list.Add("magic orbs and crystals");
+
+            // ... grab the right words
+            string adjectives_string = adjectives_list[RandomNumber(0, adjectives_list.Count - 1)];
+            string light_sources_string = light_sources_list[RandomNumber(0, light_sources_list.Count - 1)];
+
+            // ... build the output string
+            string lighting_description = $"{adjectives_string} lit by {light_sources_string}";
+
+            // ... return some output
+            return lighting_description;
         } // end public string Lighting()
     } // class PBHouse
 
