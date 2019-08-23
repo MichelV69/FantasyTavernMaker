@@ -10,7 +10,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Thu 22-Aug-2019 @ 23h25 ADT by m.vaillancourt
+     *   Last updated  : Fri 23-Aug-2019 @ 11h47 ADT by m.vaillancourt
      *   
      */
     class MainClass
@@ -28,6 +28,7 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Name:  {pbh.Name()}");
                 Console.WriteLine($"Current Mood: {pbh.Mood()}");
                 Console.WriteLine($"Lighting Environment: {pbh.Lighting()}");
+                Console.WriteLine($"Smells of: {pbh.Smells()}");
                 Console.WriteLine("  ");
             } // end-for
 
@@ -197,6 +198,41 @@ namespace PBHouse_CLI
             // ... return some output
             return lighting_description;
         } // end public string Lighting()
+
+        // -----
+        public string Smells()
+        {
+            // load a pair of lists with a set of adjectives then return one from
+            // ... each list for the PBHouse olfactory environment
+
+            // ... create fancy two-column list
+            List<List<string>> holding_2col_list = new List<List<string>>();
+            List<string> data_col1 = new List<string> { };
+
+            // ... so yes, this is make-work; it's proof-of-understanding
+            data_col1.Add("wood smoke");
+            data_col1.Add("spices");
+            data_col1.Add("perfumes");
+            data_col1.Add("weary travellers");
+            data_col1.Add("strong drink");
+            data_col1.Add("tobacco");
+            data_col1.Add("spiced tobacco");
+            data_col1.Add("shisha");
+            data_col1.Add("fresh linen");
+            data_col1.Add("hot bread");
+            data_col1.Add("fresh pastries");
+
+            // ... now slot the 'data list' into the 'holding list'
+            holding_2col_list.Add(data_col1);
+
+            // ... grab one desc from each column
+            string first_word = holding_2col_list[0][RandomNumber(0, holding_2col_list[0].Count - 1)];
+            string second_word = holding_2col_list[0][RandomNumber(0, holding_2col_list[0].Count - 1)];
+
+            // ... now return some output
+            return $"{first_word} and {second_word}";
+        } // end public string Smells()
+
     } // class PBHouse
 
 } // namespace PBHouse_CLI
