@@ -10,7 +10,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Thu 22-Aug-2019 @ 16h11 ADT by m.vaillancourt
+     *   Last updated  : Thu 22-Aug-2019 @ 23h00 ADT by m.vaillancourt
      *   
      */
     class MainClass
@@ -21,10 +21,12 @@ namespace PBHouse_CLI
 
             PBHouse pbh = new PBHouse();
 
-            for (int i = 0; i < 5; i++)
+            for (int loop = 0; loop < 5; loop++)
             {
-                Console.WriteLine($"{pbh.Name()}");
-            }
+                Console.WriteLine($"Name:  {pbh.Name()}");
+                Console.WriteLine($"Current Mood: {pbh.Mood()}");
+                Console.WriteLine("  ");
+            } // end-for
 
             // Keep the console window open in debug mode.
             Console.WriteLine("Press any key to exit.");
@@ -34,18 +36,20 @@ namespace PBHouse_CLI
 
     class PBHouse
     {
+        // -----
         public int RandomNumber(int min, int max)
         {
             // Generate a random number between two numbers
             Random random = new Random();
             return random.Next(min, max);
-        }
+        } // end public int RandomNumber
 
+        // -----
         public string Name()
         {
             // using a pair of Lists, generate  "Verb Noun" name for our PBHouse
-            // ... create the lists
 
+            // ... create the lists
             List<string> name_verb = new List<string> {};
             List<string> name_noun = new List<string> {};
 
@@ -113,14 +117,56 @@ namespace PBHouse_CLI
             name_verb.Add("Heaving");
             name_noun.Add("Waves");
 
+            // ... check how long the Lists are
             int name_verb_count = name_verb.Count;
             int name_noun_count = name_noun.Count;
 
+            // ... roll some dice
             int name_verb_roll = RandomNumber(0, name_verb_count -1);
             int name_noun_roll = RandomNumber(0, name_noun_count -1);
 
+            // ... return the result
             return $"the {name_verb[name_verb_roll]} {name_noun[name_noun_roll]}";
         } // end public string Name()
+
+        // -----
+        public string Mood()
+        {
+            // using a list of adjectives, descript the mood of our PBHouse
+
+            // ... create the lists=
+            List<string> adjectives_list = new List<string> { };
+
+            // ... load the list
+            adjectives_list.Add("jovial");
+            adjectives_list.Add("relaxing");
+            adjectives_list.Add("smoky");
+            adjectives_list.Add("erudite");
+            adjectives_list.Add("loud");
+            adjectives_list.Add("subdued");
+            adjectives_list.Add("rowdy");
+            adjectives_list.Add("seedy");
+            adjectives_list.Add("shady");
+            adjectives_list.Add("busy");
+            adjectives_list.Add("lower-class");
+            adjectives_list.Add("middle-class");
+            adjectives_list.Add("upper-class");
+            adjectives_list.Add("merchant-friendly");
+            adjectives_list.Add("dour");
+            adjectives_list.Add("flirty");
+
+            // ... use a crunchy-format load string
+            string mood_description = $"{adjectives_list[RandomNumber(0, adjectives_list.Count -1)]}";
+
+            // ... return the result
+            return mood_description;
+        } // end public string Mood()
+
+        // -----
+        public string Lighting()
+        {
+
+        } // end public string Lighting()
     } // class PBHouse
 
 } // namespace PBHouse_CLI
