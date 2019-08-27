@@ -10,25 +10,39 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Fri 23-Aug-2019 @ 11h47 ADT by m.vaillancourt
+     *   Last updated  : Tue 27-Aug-2019 @ 11h13 ADT by m.vaillancourt
      *   
      */
     class MainClass
     {
         public static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World!");
+            Console.WriteLine("\n ------ ");
+            Console.WriteLine("test the dice roller");
+            DiceBagEngine diceBag = new DiceBagEngine();
 
+            int dice_roll = diceBag.RollDice("2d4");
+            Console.WriteLine($"2d4: {dice_roll}");
+
+            Console.WriteLine($"2d4+8: {diceBag.RollDice("2d4+8")}");
+            Console.WriteLine($"2d6-7: {diceBag.RollDice("2d6-7")}");
+            Console.WriteLine($"3d6: {diceBag.RollDice("3d6")}");
+            Console.WriteLine($"4d8+4: {diceBag.RollDice("4d8+4")}");
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+
+            Console.WriteLine("\n ------ ");
+            Console.WriteLine("demo PBHouse");
             PBHouse pbh = new PBHouse();
-
             int loop_max = 9;
-
             for (int loop = 0; loop <= loop_max; loop++)
             {
                 Console.WriteLine($"Name:  {pbh.Name()}");
                 Console.WriteLine($"Current Mood: {pbh.Mood()}");
                 Console.WriteLine($"Lighting Environment: {pbh.Lighting()}");
                 Console.WriteLine($"Smells of: {pbh.Smells()}");
+                Console.WriteLine($"Size: {pbh.Size()}");
                 Console.WriteLine("  ");
             } // end-for
 
@@ -232,6 +246,45 @@ namespace PBHouse_CLI
             // ... now return some output
             return $"{first_word} and {second_word}";
         } // end public string Smells()
+
+        // -----
+        public string Size()
+        {
+            // use a weighted case/switch ladder to determine size info for the PBHouse
+            // init the blank holder variable
+            string size_description = "";
+
+            // non-linear chance for size
+            int dice_roll = RandomNumber(1, 9);
+
+            switch(dice_roll)
+            {
+                case 1:
+                    int table_count = 0;
+                    size_description = $"tiny, with [2d4] tables. It has [1d4] hammocks in the common room and no private rooms";
+
+                    break;
+                case 2:
+                case 3:
+                    size_description = $"small, with [3d4] tables. It has [2d4] bunk-beds in the common room and [1d4] private rooms";
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    size_description = $"modest, with [4d6] tables. It has [3d6] single beds in the common room and [2d6] private rooms";
+                    break;
+                case 7:
+                case 8:
+                    size_description = $"large, with [5d6] tables. It has [4d6] tent-beds in the common room and [3d6] private rooms";
+                    break;
+                case 9:
+                    size_description = $"massive, with [7d8] tables. It has [6d8] tent-beds in the common room and [4d8] private rooms";
+                    break;
+            } // end-switch
+
+            return size_description;
+        } //public string Size()
+
 
     } // class PBHouse
 
