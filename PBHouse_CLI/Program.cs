@@ -11,7 +11,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Tue 27-Aug-2019 @ 14h52 ADT by m.vaillancourt
+     *   Last updated  : Tue 27-Aug-2019 @ 16h37 ADT by m.vaillancourt
      *   
      */
     class MainClass
@@ -48,6 +48,7 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Smells of: {pbh.Smells()}");
                 Console.WriteLine($"Size: {pbh.Size()}");
                 Console.WriteLine($"Posted Sign: {pbh.PostedSign()}");
+                Console.WriteLine($"Specialty Drink: {pbh.SpecialtyDrink()}");
             } // end-for
 
             Console.WriteLine("\n ------ ");
@@ -358,6 +359,64 @@ namespace PBHouse_CLI
             sign_description = $"a sign {PickFromList(sign_location)} says '{PickFromList(posted_message)}'.";
             return sign_description;
         } // end public string PostedSign()
+
+        // -----
+        public string SpecialtyDrink()
+        {
+            //  Using ale, cider, whiskey, wine and other drink descriptions saved
+            //      as indivdual list files, build a description of the PBHouse SpecialtyDrink
+
+            //  init empty vars and create lists
+            DiceBagEngine diceBag = new DiceBagEngine();
+            string specialty_drink_description = "";
+            string coin_type = "";
+            string where_made = "";
+            string fileToLoad = "";
+            List<string> drink_categories = new List<string> {"ales", "ciders", "whiskeys", "rums", "wines", "other_stock"};
+            List<string> fileContent = new List<string> { };
+            List<string> drink_list = new List<string> { };
+            
+            //--  loop the drink_categories list
+            foreach (var drink in drink_categories)
+            {
+                fileToLoad = Path.Combine(Environment.CurrentDirectory, $"table_data/drink_specialty.{drink}.data");
+                fileContent = File.ReadAllLines(fileToLoad).ToList();
+
+                //  loop the list, adding it to the drink_list properly postfixed
+                for (int loop = 0; loop < fileContent.Count; loop++)
+                {
+                    string drink_name = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(drink.TrimEnd('s'));
+                    if (drink == "other_stock")
+                    {
+                        drink_name = "";
+                    }
+                    drink_list.Add($"{fileContent[loop]} {drink_name}".TrimEnd(' '));
+                } // end-for
+            } // end-foreach
+
+
+            //--  build the content
+            coin_type = "copper";  // TODO:  something clever here where 'wealthy' inns pay silver instead.
+
+            switch (diceBag.RollDice("1d6"))
+            {
+                case 1:
+                    where_made = "an imported";
+                    break;
+                case 2:
+                case 3:
+                    where_made = "a locally made";
+                    break;
+                default:
+                    where_made = "the House's own";
+                    break;
+            } // end-switch
+
+            specialty_drink_description = $"{where_made} {PickFromList(drink_list)}, for {diceBag.RollDice("2d4+3")} {coin_type}";
+
+            //  return some content
+            return specialty_drink_description;
+        } // public string SpecialtyDrink()
 
     } // class PBHouse
 
