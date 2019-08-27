@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace PBHouse_CLI
 {
@@ -10,13 +11,14 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Tue 27-Aug-2019 @ 13h46 ADT by m.vaillancourt
+     *   Last updated  : Tue 27-Aug-2019 @ 14h52 ADT by m.vaillancourt
      *   
      */
     class MainClass
     {
         public static void Main(string[] args)
         {
+            /*
             Console.WriteLine("\n ------ ");
             Console.WriteLine("test the dice roller");
             DiceBagEngine diceBag = new DiceBagEngine();
@@ -31,21 +33,24 @@ namespace PBHouse_CLI
 
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
+            */
 
             Console.WriteLine("\n ------ ");
             Console.WriteLine("demo PBHouse");
             PBHouse pbh = new PBHouse();
-            int loop_max = 9;
-            for (int loop = 0; loop <= loop_max; loop++)
+            int loop_max = 3;
+            for (int loop = 1; loop <= loop_max; loop++)
             {
+                Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {pbh.Name()}");
                 Console.WriteLine($"Current Mood: {pbh.Mood()}");
                 Console.WriteLine($"Lighting Environment: {pbh.Lighting()}");
                 Console.WriteLine($"Smells of: {pbh.Smells()}");
                 Console.WriteLine($"Size: {pbh.Size()}");
-                Console.WriteLine("  ");
+                Console.WriteLine($"Posted Sign: {pbh.PostedSign()}");
             } // end-for
 
+            Console.WriteLine("\n ------ ");
             // Keep the console window open in debug mode.
             //Console.WriteLine("Press any key to exit.");
             //Console.ReadKey();
@@ -329,6 +334,30 @@ namespace PBHouse_CLI
 
             return blurb;
         } //public string Size()
+
+        // -----
+        public string PostedSign()
+        {
+            // random select from list of messages and sign locations 
+            string sign_description = "";
+
+            // ... create list
+            List<string> posted_message = new List<string> { };
+            List<string> sign_location  = new List<string> { };
+
+            // ... new and shiny advanced file-reading techniqification
+            string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/posted_sign.message.data");
+            List<string> fileContent = File.ReadAllLines(fileToLoad).ToList();
+            posted_message.AddRange(fileContent);
+
+            fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/posted_sign.location.data");
+            fileContent = File.ReadAllLines(fileToLoad).ToList();
+            sign_location.AddRange(fileContent);
+
+            // ... build and return the sign_description
+            sign_description = $"a sign {PickFromList(sign_location)} says '{PickFromList(posted_message)}'.";
+            return sign_description;
+        } // end public string PostedSign()
 
     } // class PBHouse
 
