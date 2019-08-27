@@ -10,7 +10,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Tue 27-Aug-2019 @ 11h13 ADT by m.vaillancourt
+     *   Last updated  : Tue 27-Aug-2019 @ 11h57 ADT by m.vaillancourt
      *   
      */
     class MainClass
@@ -55,12 +55,20 @@ namespace PBHouse_CLI
     class PBHouse
     {
         // -----
-        public int RandomNumber(int min, int max)
+        public string PickFromList(List<string> pick_list)
         {
-            // Generate a random number between two numbers
+            // given a list of strings, determine the size of the list and
+            // ... random roll to choose one to return
             Random random = new Random();
-            return random.Next(min, max);
-        } // end public int RandomNumber
+
+            int min = 0 ;
+            int max = pick_list.Count - 1;
+            int index = random.Next(min, max);
+
+            string picked_word = pick_list[index];
+            return picked_word;
+
+        } // end public int PickFromList
 
         // -----
         public string Name()
@@ -135,16 +143,8 @@ namespace PBHouse_CLI
             name_verb.Add("Heaving");
             name_noun.Add("Waves");
 
-            // ... check how long the Lists are
-            int name_verb_count = name_verb.Count;
-            int name_noun_count = name_noun.Count;
-
-            // ... roll some dice
-            int name_verb_roll = RandomNumber(0, name_verb_count -1);
-            int name_noun_roll = RandomNumber(0, name_noun_count -1);
-
             // ... return the result
-            return $"the {name_verb[name_verb_roll]} {name_noun[name_noun_roll]}";
+            return $"the {PickFromList(name_verb)} {PickFromList(name_noun)}";
         } // end public string Name()
 
         // -----
@@ -173,11 +173,8 @@ namespace PBHouse_CLI
             adjectives_list.Add("dour");
             adjectives_list.Add("flirty");
 
-            // ... use a crunchy-format load string
-            string mood_description = $"{adjectives_list[RandomNumber(0, adjectives_list.Count -1)]}";
-
             // ... return the result
-            return mood_description;
+            return PickFromList(adjectives_list);
         } // end public string Mood()
 
         // -----
@@ -203,8 +200,8 @@ namespace PBHouse_CLI
             light_sources_list.Add("magic orbs and crystals");
 
             // ... grab the right words
-            string adjectives_string = adjectives_list[RandomNumber(0, adjectives_list.Count - 1)];
-            string light_sources_string = light_sources_list[RandomNumber(0, light_sources_list.Count - 1)];
+            string adjectives_string    = PickFromList(adjectives_list);
+            string light_sources_string = PickFromList(light_sources_list);
 
             // ... build the output string
             string lighting_description = $"{adjectives_string} lit by {light_sources_string}";
@@ -240,8 +237,8 @@ namespace PBHouse_CLI
             holding_2col_list.Add(data_col1);
 
             // ... grab one desc from each column
-            string first_word = holding_2col_list[0][RandomNumber(0, holding_2col_list[0].Count - 1)];
-            string second_word = holding_2col_list[0][RandomNumber(0, holding_2col_list[0].Count - 1)];
+            string first_word = PickFromList(holding_2col_list[0]);
+            string second_word = PickFromList(holding_2col_list[0]);
 
             // ... now return some output
             return $"{first_word} and {second_word}";
@@ -251,41 +248,77 @@ namespace PBHouse_CLI
         public string Size()
         {
             // use a weighted case/switch ladder to determine size info for the PBHouse
-            // init the blank holder variable
+
+            // instanciate our external class
+            DiceBagEngine diceBag = new DiceBagEngine();
+
+            // init the blank holder variables
             string size_description = "";
+            int table_count = 0;
+            string common_bed_word = "";
+            int common_bed_count = 0;
+            int private_room_count = 0;
 
             // non-linear chance for size
-            int dice_roll = RandomNumber(1, 9);
+            int dice_roll = diceBag.RollDice("1d12");
 
             switch(dice_roll)
             {
                 case 1:
-                    int table_count = 0;
-                    size_description = $"tiny, with [2d4] tables. It has [1d4] hammocks in the common room and no private rooms";
-
+                    size_description = "tiny";
+                    table_count = diceBag.RollDice("2d4");
+                    common_bed_word = "hammocks";
+                    common_bed_count = diceBag.RollDice("1d4");
+                    private_room_count = 0;
                     break;
+
                 case 2:
                 case 3:
-                    size_description = $"small, with [3d4] tables. It has [2d4] bunk-beds in the common room and [1d4] private rooms";
-                    break;
                 case 4:
+                    size_description = "small";
+                    table_count = diceBag.RollDice("3d4");
+                    common_bed_word = "bunk-beds";
+                    common_bed_count = diceBag.RollDice("2d4");
+                    private_room_count = diceBag.RollDice("1d4");
+                    break;
+
                 case 5:
                 case 6:
-                    size_description = $"modest, with [4d6] tables. It has [3d6] single beds in the common room and [2d6] private rooms";
-                    break;
                 case 7:
                 case 8:
-                    size_description = $"large, with [5d6] tables. It has [4d6] tent-beds in the common room and [3d6] private rooms";
+                    size_description = "modest";
+                    table_count = diceBag.RollDice("4d6");
+                    common_bed_word = "single beds";
+                    common_bed_count = diceBag.RollDice("3d6");
+                    private_room_count = diceBag.RollDice("2d6");
                     break;
+
                 case 9:
-                    size_description = $"massive, with [7d8] tables. It has [6d8] tent-beds in the common room and [4d8] private rooms";
+                case 10:
+                case 11:
+                    size_description = "large";
+                    table_count = diceBag.RollDice("5d6");
+                    common_bed_word = "tent-beds";
+                    common_bed_count = diceBag.RollDice("4d6");
+                    private_room_count = diceBag.RollDice("3d6");
                     break;
+
+                case 12:
+                    size_description = "massive";
+                    table_count = diceBag.RollDice("7d8");
+                    common_bed_word = "tent-beds";
+                    common_bed_count = diceBag.RollDice("6d8");
+                    private_room_count = diceBag.RollDice("4d8");
+                    break;
+
             } // end-switch
 
-            return size_description;
-        } //public string Size()
+            string blurb = $"{size_description}, with {table_count} tables. It has {common_bed_count} {common_bed_word} in the common room and {private_room_count} private rooms";
 
+            return blurb;
+        } //public string Size()
 
     } // class PBHouse
 
 } // namespace PBHouse_CLI
+// ----- end of file -----
