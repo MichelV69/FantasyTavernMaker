@@ -10,7 +10,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Tue 27-Aug-2019 @ 11h57 ADT by m.vaillancourt
+     *   Last updated  : Tue 27-Aug-2019 @ 13h46 ADT by m.vaillancourt
      *   
      */
     class MainClass
@@ -219,6 +219,7 @@ namespace PBHouse_CLI
             // ... create fancy two-column list
             List<List<string>> holding_2col_list = new List<List<string>>();
             List<string> data_col1 = new List<string> { };
+            List<string> data_col2 = new List<string> { };
 
             // ... so yes, this is make-work; it's proof-of-understanding
             data_col1.Add("wood smoke");
@@ -231,14 +232,25 @@ namespace PBHouse_CLI
             data_col1.Add("shisha");
             data_col1.Add("fresh linen");
             data_col1.Add("hot bread");
-            data_col1.Add("fresh pastries");
+
+            data_col2.Add("fresh pastries");
+            data_col2.Add("foods cooking");
+            data_col2.Add("the outside surroundings");
+            data_col2.Add("the ocean");
+            data_col2.Add("the forests");
+            data_col2.Add("fermenting wine");
+            data_col2.Add("hops");
+            data_col2.Add("fermenting rye");
+            data_col2.Add("hot spiced cider");
+            data_col2.Add("baking sweets");
 
             // ... now slot the 'data list' into the 'holding list'
             holding_2col_list.Add(data_col1);
+            holding_2col_list.Add(data_col2);
 
             // ... grab one desc from each column
             string first_word = PickFromList(holding_2col_list[0]);
-            string second_word = PickFromList(holding_2col_list[0]);
+            string second_word = PickFromList(holding_2col_list[1]);
 
             // ... now return some output
             return $"{first_word} and {second_word}";
