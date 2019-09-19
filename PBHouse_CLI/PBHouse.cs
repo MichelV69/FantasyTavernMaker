@@ -5,19 +5,21 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Wed, Sep 18, 2019  8:49 PM by m.vaillancourt
+ *  Last updated Wed, Sep 18, 2019  9:35 PM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
 {
     class PBHouse
     {
+        private Random random = new Random((int)DateTime.Now.Ticks);
+        private DiceBagEngine diceBag = new DiceBagEngine();
+
         // -----
         public string PickFromList(List<string> pick_list)
         {
             // given a list of strings, determine the size of the list and
             // ... random roll to choose one to return
-            Random random = new Random();
 
             int min = 0;
             int max = pick_list.Count - 1;
@@ -219,9 +221,6 @@ namespace PBHouse_CLI
         {
             // use a weighted case/switch ladder to determine size info for the PBHouse
 
-            // instanciate our external class
-            DiceBagEngine diceBag = new DiceBagEngine();
-
             // init the blank holder variables
             string size_description = "";
             int table_count = 0;
@@ -319,7 +318,6 @@ namespace PBHouse_CLI
             //      as indivdual list files, build a description of the PBHouse SpecialtyDrink
 
             //  init empty vars and create lists
-            DiceBagEngine diceBag = new DiceBagEngine();
             string specialty_drink_description = "";
             string coin_type = "";
             string where_made = "";
@@ -374,7 +372,6 @@ namespace PBHouse_CLI
         public string SpecialtyFood()
         {
             //  init empty vars and create lists
-            DiceBagEngine diceBag = new DiceBagEngine();
             string specialty_food_description = "";
             string coin_type = "";
             string data_slot = "";
@@ -410,7 +407,6 @@ namespace PBHouse_CLI
         public string EstablishmentHistory()
         {
             //  init empty vars and create lists
-            DiceBagEngine diceBag = new DiceBagEngine();
             string establishment_history_notes = "The establishment is ";
             string fileToLoad = "";
 
@@ -452,6 +448,14 @@ namespace PBHouse_CLI
             }
 
             return establishment_history_notes;
+        }
+
+        // -----
+        public string RedLightServices()
+        {
+            string redlight_services_desc = "finish RedLightServices";
+
+            return redlight_services_desc;
         }
 
     } // class PBHouse

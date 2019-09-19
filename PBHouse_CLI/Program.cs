@@ -8,7 +8,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Mon, Sep 16, 2019 10:52 PM by m.vaillancourt
+     *   Last updated  : Wed, Sep 18, 2019  9:26 PM by m.vaillancourt
      *   
      */
     class MainClass
@@ -31,6 +31,7 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Specialty Drink: {pbh.SpecialtyDrink()}");
                 Console.WriteLine($"Specialty Food: {pbh.SpecialtyFood()}");
                 Console.WriteLine($"Specialty Food: {pbh.EstablishmentHistory()}");
+                Console.WriteLine($"Red Light Services: {pbh.RedLightServices()}");
 
             } // end-for
 
