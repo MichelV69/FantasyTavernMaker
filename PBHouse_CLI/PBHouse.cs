@@ -451,11 +451,9 @@ namespace PBHouse_CLI
         }
 
         // -----
-        public string RedLightServices()
+        // create a class of redlight_services for use in RedLightServices()
+        private class RedlightServicesInfo
         {
-        // create a class of redlight_services
-        public class RedlightServicesInfo
-            {
             // Auto-implemented properties for trivial get and set
             public int RollChance { get; set; }
             public string ServiceDescription { get; set; }
@@ -463,25 +461,98 @@ namespace PBHouse_CLI
 
             // Constructor
             public RedlightServicesInfo(int roll_chance, string service_description, string difficulty_class)
-                {
+            {
                 this.RollChance = roll_chance;
                 this.ServiceDescription = service_description;
                 this.DifficultyClass = difficulty_class;
-                } // end Constructor
-            } // end class redlight_services
+            } // end Constructor
+        } // end class redlight_services
 
-        string redlight_services_desc = "finish RedLightServices";
+        // -----
+        public string RedLightServices()
+        {
+            string redlight_services_desc = "";
 
-        // ... create list of redlight_services objects
-        List<RedlightServicesInfo> redlight_services_list = new List<RedlightServicesInfo> { };
+            // ... create list of redlight_services objects
+            List<RedlightServicesInfo> redlight_services_list = new List<RedlightServicesInfo> { };
 
-        // ... load lists
-        redlight_services_list.Add(new RedlightServicesInfo(3, "Brothel Services", "1d4+10"));
-        redlight_services_list.Add(new RedlightServicesInfo(2, "Gambling", "1d4+11"));
+            // ... load lists
+            redlight_services_list.Add(new RedlightServicesInfo(4, "Gambling", "1d4+8"));
+            redlight_services_list.Add(new RedlightServicesInfo(3, "Brothel Services", "1d4+10"));
+            redlight_services_list.Add(new RedlightServicesInfo(2, "Smuggling", "2d4+11"));
+            redlight_services_list.Add(new RedlightServicesInfo(1, "Pit Fighting", "2d4+12"));
+            redlight_services_list.Add(new RedlightServicesInfo(1, "Sinfyre Den", "3d4+13"));
+            redlight_services_list.Add(new RedlightServicesInfo(1, "Thief / Assassin Guild (ADV w/Thieves Cant)", "4d4+14"));
 
-        // ... now build some output
+            // ... 50% chance there are services
+            if (diceBag.RollDice("1d100") > 50)
+            {
+                // ... scalar of up to 6 services; loop as required
+                var loop_count = 0;
+                switch (diceBag.RollDice("1d10"))
+                {
+                    case 1:
+                        loop_count = 4;
+                        break;
+                    case 2:
+                    case 3:
+                        loop_count = 3;
+                        break;
+                    case 4:
+                    case 5:
+                    case 6:
+                        loop_count = 2;
+                        break;
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        loop_count = 1;
+                        break;
+                }
 
-        return redlight_services_desc;
+                // now figure out what our die type is
+                int die_type = 0;
+                foreach (var rl_service in redlight_services_list)
+                {
+                    die_type += rl_service.RollChance;
+                }
+
+                // so now roll our die and pick from redlight_services_list
+                for (int i = 0; i < loop_count; i++)
+                {
+                    int table_floor = 1;
+                    int table_ceiling = 0;
+                    int rolled_dice = diceBag.RollDice($"1d{die_type}");
+                    RedlightServicesInfo working_service = new RedlightServicesInfo(0,"--","1d4");
+
+                    //Console.WriteLine(" ");
+                    //Console.WriteLine($"DEBUG: from - to (1d{die_type}) ");
+                    // loop the service list until we are in the right place
+                    foreach (var rl_service in redlight_services_list)
+                    {
+                        table_ceiling = table_floor + rl_service.RollChance - 1;
+                        //Console.WriteLine($"DEBUG: {table_floor} - {table_ceiling}");
+
+                        if (table_floor <= rolled_dice && rolled_dice <= table_ceiling)
+                        {
+                            working_service = rl_service;
+                        }
+                        table_floor = table_ceiling + 1;
+                    } // end foreach
+
+                    // ... now build some output
+                    int rolled_DC = diceBag.RollDice(working_service.DifficultyClass);
+                    redlight_services_desc += $"[{working_service.ServiceDescription} (DC{rolled_DC})] ";
+                } // end for
+            }
+            else
+            {
+                redlight_services_desc = "<none>";
+            }
+
+            // return the results of our hard work
+            return redlight_services_desc;
         }
 
     } // class PBHouse
