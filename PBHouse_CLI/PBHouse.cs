@@ -5,7 +5,7 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Sun, Sep 22, 2019 1:04 PM by m.vaillancourt
+ *  Last updated Sun, Sep 22, 2019 1:26 PM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
@@ -555,13 +555,51 @@ namespace PBHouse_CLI
         }
 
         // -----
-        public string EstablishmentQuality()
+        public (string, string, string) EstablishmentQuality()
         {
-            string establishment_quality_desc = "Finish EstablishmentQuality";
+            string quality = "";
+            string rooms = "";
+            string meals = "";
 
-            return establishment_quality_desc;
+            switch (diceBag.RollDice("2d6"))
+            {
+                case 2:
+                    quality = "Squalid ";
+                    rooms = "7cp";
+                    meals = "3cp";
+                    break;
+                case 3:
+                case 4:
+                    quality = "Poor";
+                    rooms = "1sp";
+                    meals = "6cp";
+                    break;
+                case 5:
+                case 6:
+                    quality = "Modest";
+                    rooms = "5sp";
+                    meals = "3sp";
+                    break;
+                case 7:
+                case 8:
+                    quality = "Comfortable";
+                    rooms = "8sp";
+                    meals = "5sp";
+                    break;
+                case 9:
+                case 10:
+                    quality = "Wealthy (2gp + 8sp)";
+                    rooms = "2gp";
+                    meals = "8sp";
+                    break;
+                case 11:
+                case 12:
+                    quality = "Aristocratic";
+                    rooms = "4gp";
+                    meals = "2gp";
+                    break;
+            }
+            return (quality, rooms, meals);
         }
-
-
     } // class PBHouse
 }

@@ -8,7 +8,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Sun, Sep 22, 2019 1:01 PM by m.vaillancourt
+     *   Last updated  : Sun, Sep 22, 2019 1:31 PM by m.vaillancourt
      *   
      */
     class MainClass
@@ -24,7 +24,7 @@ namespace PBHouse_CLI
             {
                 // ---- create an example PBHouse
                 var name = pbh.Name();
-                var quality = diceBag.SearchStringForRolls(pbh.EstablishmentQuality());
+                var quality_list = pbh.EstablishmentQuality(); // quality, rooms_cost, meals_cost
                 var mood = pbh.Mood();
                 var lights = pbh.Lighting();
                 var smells = pbh.Smells();
@@ -37,7 +37,7 @@ namespace PBHouse_CLI
 
                 Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
-                Console.WriteLine($"Establishment Quality: {quality}");
+                Console.WriteLine($"Establishment Quality: {quality_list.Item1};  Room {quality_list.Item2} & Board {quality_list.Item3}");
                 Console.WriteLine($"Size: {size}");
                 Console.WriteLine($"Current Mood: {mood}");
                 Console.WriteLine($"Lighting Environment: {lights}");
@@ -49,7 +49,8 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Red Light Services: {naughty}");
 
                 var desc_line1 = $"The local Pub and Bed House for travellers is the {name}." +
-                    $" The {quality}-quality establishment would be considered {size}.";
+                    $" The {quality_list.Item1}-quality establishment would be considered {size}." +
+                    $" Rooms are {quality_list.Item2} per day, and meals are {quality_list.Item3} per day.";
 
                 var desc_line2 = $"As you enter, you smell {smells}. It seems to be a {mood} place, {lights}." +
                     $" A sign {posted_sign}.";
