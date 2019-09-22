@@ -5,7 +5,7 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Sun, Sep 22, 2019 11:57 AM by m.vaillancourt
+ *  Last updated Sun, Sep 22, 2019 1:04 PM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
@@ -307,7 +307,7 @@ namespace PBHouse_CLI
             sign_location.AddRange(fileContent);
 
             // ... build and return the sign_description
-            sign_description = $"a sign {PickFromList(sign_location)} says '{PickFromList(posted_message)}'.";
+            sign_description = $"a sign {PickFromList(sign_location)} says '{PickFromList(posted_message)}'";
             return sign_description;
         } // end public string PostedSign()
 
