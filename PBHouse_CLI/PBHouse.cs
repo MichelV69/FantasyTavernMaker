@@ -411,7 +411,7 @@ namespace PBHouse_CLI
             string fileToLoad = "";
 
             // going to do weighted picks
-            List<string> categories = new List<string> {};
+            List<string> categories = new List<string> { };
 
             categories.Add("age");
             categories.Add("building_condition");
@@ -453,9 +453,35 @@ namespace PBHouse_CLI
         // -----
         public string RedLightServices()
         {
-            string redlight_services_desc = "finish RedLightServices";
+        // create a class of redlight_services
+        public class RedlightServicesInfo
+            {
+            // Auto-implemented properties for trivial get and set
+            public int RollChance { get; set; }
+            public string ServiceDescription { get; set; }
+            public string DifficultyClass { get; set; }
 
-            return redlight_services_desc;
+            // Constructor
+            public RedlightServicesInfo(int roll_chance, string service_description, string difficulty_class)
+                {
+                this.RollChance = roll_chance;
+                this.ServiceDescription = service_description;
+                this.DifficultyClass = difficulty_class;
+                } // end Constructor
+            } // end class redlight_services
+
+        string redlight_services_desc = "finish RedLightServices";
+
+        // ... create list of redlight_services objects
+        List<RedlightServicesInfo> redlight_services_list = new List<RedlightServicesInfo> { };
+
+        // ... load lists
+        redlight_services_list.Add(new RedlightServicesInfo(3, "Brothel Services", "1d4+10"));
+        redlight_services_list.Add(new RedlightServicesInfo(2, "Gambling", "1d4+11"));
+
+        // ... now build some output
+
+        return redlight_services_desc;
         }
 
     } // class PBHouse
