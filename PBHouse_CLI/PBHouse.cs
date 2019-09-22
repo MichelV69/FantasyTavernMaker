@@ -5,7 +5,7 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Sun, Sep 22, 2019 1:26 PM by m.vaillancourt
+ *  Last updated Sun, Sep 22, 2019 7:44 PM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
@@ -307,12 +307,12 @@ namespace PBHouse_CLI
             sign_location.AddRange(fileContent);
 
             // ... build and return the sign_description
-            sign_description = $"a sign {PickFromList(sign_location)} says '{PickFromList(posted_message)}'";
+            sign_description = $"{PickFromList(sign_location)} says '{PickFromList(posted_message)}'";
             return sign_description;
         } // end public string PostedSign()
 
         // -----
-        public string SpecialtyDrink()
+        public string SpecialtyDrink(string inn_quality)
         {
             //  Using ale, cider, whiskey, wine and other drink descriptions saved
             //      as indivdual list files, build a description of the PBHouse SpecialtyDrink
@@ -346,7 +346,11 @@ namespace PBHouse_CLI
 
 
             //--  build the content
-            coin_type = "copper";  // TODO:  something clever here where 'wealthy' inns pay silver instead.
+            coin_type = "copper";
+            if (inn_quality == "Wealthy" || inn_quality == "Aristocratic")
+            {
+                coin_type = "silver";
+            }
 
             switch (diceBag.RollDice("1d6"))
             {
@@ -369,7 +373,7 @@ namespace PBHouse_CLI
         } // public string SpecialtyDrink()
 
         // -----
-        public string SpecialtyFood()
+        public string SpecialtyFood(string inn_quality)
         {
             //  init empty vars and create lists
             string specialty_food_description = "";
@@ -394,9 +398,13 @@ namespace PBHouse_CLI
             served_with = File.ReadAllLines(fileToLoad).ToList();
 
             //--  build the content
-            coin_type = "copper";  // TODO:  something clever here where 'wealthy' inns pay silver instead.
+            coin_type = "copper";
+            if (inn_quality == "Wealthy" || inn_quality == "Aristocratic")
+            {
+                coin_type = "silver";
+            }
 
-            specialty_food_description = $"{PickFromList(what_food)} {PickFromList(how_cooked)} served with {PickFromList(served_with)}, for {diceBag.RollDice("2d4+3")} {coin_type}";
+            specialty_food_description = $"{PickFromList(how_cooked)} {PickFromList(what_food)}, served with {PickFromList(served_with)}, for {diceBag.RollDice("2d4+3")} {coin_type}";
 
             //  return some content
             return specialty_food_description;
@@ -588,7 +596,7 @@ namespace PBHouse_CLI
                     break;
                 case 9:
                 case 10:
-                    quality = "Wealthy (2gp + 8sp)";
+                    quality = "Wealthy";
                     rooms = "2gp";
                     meals = "8sp";
                     break;
