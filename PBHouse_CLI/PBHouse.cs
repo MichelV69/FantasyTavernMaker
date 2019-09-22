@@ -5,7 +5,7 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Wed, Sep 18, 2019  9:35 PM by m.vaillancourt
+ *  Last updated Sun, Sep 22, 2019 11:57 AM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
@@ -542,8 +542,7 @@ namespace PBHouse_CLI
                     } // end foreach
 
                     // ... now build some output
-                    int rolled_DC = diceBag.RollDice(working_service.DifficultyClass);
-                    redlight_services_desc += $"[{working_service.ServiceDescription} (DC{rolled_DC})] ";
+                    redlight_services_desc += $"({working_service.ServiceDescription} (DC[{working_service.DifficultyClass}])) ";
                 } // end for
             }
             else
@@ -554,6 +553,15 @@ namespace PBHouse_CLI
             // return the results of our hard work
             return redlight_services_desc;
         }
+
+        // -----
+        public string EstablishmentQuality()
+        {
+            string establishment_quality_desc = "Finish EstablishmentQuality";
+
+            return establishment_quality_desc;
+        }
+
 
     } // class PBHouse
 }

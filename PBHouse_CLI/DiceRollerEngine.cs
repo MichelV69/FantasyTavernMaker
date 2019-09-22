@@ -1,8 +1,8 @@
 ﻿using System;
-
+using System.Text.RegularExpressions;
 /*
  * First created Tue 27-Aug-2019 @ 09h42 ADT by m.vaillancourt
- *  Last updated Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
+ *  Last updated Sun, Sep 22, 2019 11:57 AM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
@@ -11,6 +11,7 @@ namespace PBHouse_CLI
     {
         public static Random rndGen = new Random((int)DateTime.Now.Ticks);
 
+        // -----
         public int RollDice(string dice_string)
         {
             int number_of_rolls;
@@ -63,5 +64,21 @@ namespace PBHouse_CLI
             return total_roll;
 
         } // end-public RollDice
+
+        // -----
+        public string SearchStringForRolls(string to_search)
+        {
+            var pattern = @"\[(.*?)\]";
+            var matches = Regex.Matches(to_search, pattern);
+            var fixed_string = to_search;
+            foreach (Match m in matches)
+            {
+                string dice_string = $"{m.Groups[1]}";
+                int replacement_roll = this.RollDice(dice_string);
+                fixed_string = fixed_string.Replace(dice_string, $"{replacement_roll}");
+            }
+
+            return fixed_string.Replace("[","").Replace("]","");
+        }
     } // end-class DiceBagEngine
 }

@@ -8,7 +8,7 @@ namespace PBHouse_CLI
      *      DnD5e Campaign.
      * 
      *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-     *   Last updated  : Wed, Sep 18, 2019  9:26 PM by m.vaillancourt
+     *   Last updated  : Sun, Sep 22, 2019 11:54 AM by m.vaillancourt
      *   
      */
     class MainClass
@@ -18,11 +18,14 @@ namespace PBHouse_CLI
             Console.WriteLine("\n ------ ");
             Console.WriteLine("demo PBHouse");
             PBHouse pbh = new PBHouse();
+            DiceBagEngine diceBag = new DiceBagEngine();
             int loop_max = 3;
             for (int loop = 1; loop <= loop_max; loop++)
             {
+                 // ---- create an example PBHouse
                 Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {pbh.Name()}");
+                Console.WriteLine($"Establishment Quality: {pbh.EstablishmentQuality()}");
                 Console.WriteLine($"Current Mood: {pbh.Mood()}");
                 Console.WriteLine($"Lighting Environment: {pbh.Lighting()}");
                 Console.WriteLine($"Smells of: {pbh.Smells()}");
@@ -30,8 +33,8 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Posted Sign: {pbh.PostedSign()}");
                 Console.WriteLine($"Specialty Drink: {pbh.SpecialtyDrink()}");
                 Console.WriteLine($"Specialty Food: {pbh.SpecialtyFood()}");
-                Console.WriteLine($"Specialty Food: {pbh.EstablishmentHistory()}");
-                Console.WriteLine($"Red Light Services: {pbh.RedLightServices()}");
+                Console.WriteLine($"Establishment History: {diceBag.SearchStringForRolls(pbh.EstablishmentHistory())}");
+                Console.WriteLine($"Red Light Services: {diceBag.SearchStringForRolls(pbh.RedLightServices()) }");
 
             } // end-for
 
