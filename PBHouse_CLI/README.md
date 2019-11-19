@@ -3,7 +3,7 @@
 
 ## Current Version
 
-1.0.1
+1.1.1
 
 ## Purpose 
 
@@ -41,6 +41,8 @@ evenly lit by oil lamps. A sign just outside the door says '(colorful names of p
 The menu has the usual standard fare posted. The House Specialty Drink is an 
 imported Red Wine, for 7 copper, while the House Specialty Meal is fermented 
 pheasant, served with roasted forest nuts, for 6 copper.
+
+ Press [ESC] to exit, or [SPACE] to generate 3 more.
 ```
 
 ## How To Use
@@ -51,5 +53,5 @@ pheasant, served with roasted forest nuts, for 6 copper.
 + No input is required;  output is automatically created.
 + Review the 3 generated Pub/Inn;  mix and match as you like to get one or two
 that suit your setting.  Copy-Paste results to your favorite text editor.
-+ Close console window when done.  
-+ Re-run as required.
++ To generate 3 more possible Inns & Taverns, press the [SPACE] bar
++ To finish up, press your [ESC] ("Escape") key
