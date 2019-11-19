@@ -48,14 +48,14 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Establishment History: {history}");
                 Console.WriteLine($"Red Light Services: {naughty}");
 
-                var desc_line1 = $"The local Pub and Bed House for travellers is the {name}." +
+                var desc_line1 = $"\n  The local Pub and Bed House for travellers is the {name}." +
                     $" The {quality_list.Item1}-quality establishment would be considered {size}." +
                     $" Rooms are {quality_list.Item2} per day, and meals are {quality_list.Item3} per day.";
 
-                var desc_line2 = $"As you enter, you smell {smells}. It seems to be a {mood} place, {lights}." +
+                var desc_line2 = $"\n  As you enter, you smell {smells}. It seems to be a {mood} place, {lights}." +
                     $" A sign {posted_sign}.";
 
-                var desc_line3 = $"The menu has the usual standard fare posted. " +
+                var desc_line3 = "\n  The menu has the usual standard fare posted. " +
                     $"The House Specialty Drink is {drinks}, while the House Specialty Meal is {foods}.";
 
                 Console.WriteLine(" ");
