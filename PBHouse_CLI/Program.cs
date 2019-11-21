@@ -13,6 +13,8 @@ namespace PBHouse_CLI
   */
   class MainClass
   {
+    public static int MaxTextWidthCols = 80;
+    public static string MyAppName = "Fantasy Tavern Maker";
     public static void Main(string[] args)
     {
         var do_again = true;
@@ -21,9 +23,12 @@ namespace PBHouse_CLI
         { 
             PrepConsole();
             Console.WriteLine("\n ------ ");
-            Console.WriteLine("demo PBHouse");
+            Console.WriteLine(MyAppName);
+
             PBHouse pbh = new PBHouse();
+            WordWrap ww = new WordWrap();
             DiceBagEngine diceBag = new DiceBagEngine();
+
             int loop_max = 3;
             for (int loop = 1; loop <= loop_max; loop++)
             {
@@ -42,7 +47,7 @@ namespace PBHouse_CLI
 
                 Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
-                Console.WriteLine($"Establishment Quality: {quality_list.Item1};  Room {quality_list.Item2} & Board {quality_list.Item3}");
+                Console.WriteLine(ww.doWordWrap($"Establishment Quality: {quality_list.Item1};  Room {quality_list.Item2} & Board {quality_list.Item3}", MaxTextWidthCols));
                 Console.WriteLine($"Size: {size}");
                 Console.WriteLine($"Current Mood: {mood}");
                 Console.WriteLine($"Lighting Environment: {lights}");
@@ -50,8 +55,8 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Posted Sign: {posted_sign}");
                 Console.WriteLine($"Specialty Drink: {drinks}");
                 Console.WriteLine($"Specialty Food: {foods}");
-                Console.WriteLine($"Establishment History: {history}");
-                Console.WriteLine($"Red Light Services: {naughty}");
+                Console.WriteLine(ww.doWordWrap($"Establishment History: {history}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Red Light Services: {naughty}", MaxTextWidthCols));
 
                 var desc_line1 = $"\n  The local Pub and Bed House for travellers is the {name}." +
                     $" The {quality_list.Item1}-quality establishment would be considered {size}." +
@@ -64,9 +69,9 @@ namespace PBHouse_CLI
                     $"The House Specialty Drink is {drinks}, while the House Specialty Meal is {foods}.";
 
                 Console.WriteLine(" ");
-                Console.WriteLine(desc_line1);
-                Console.WriteLine(desc_line2);
-                Console.WriteLine(desc_line3);
+                Console.WriteLine(ww.doWordWrap(desc_line1, MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap(desc_line2, MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
                 Console.WriteLine(" ");
 
             } // end-for
