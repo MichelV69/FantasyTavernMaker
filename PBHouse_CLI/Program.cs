@@ -23,6 +23,12 @@ namespace PBHouse_CLI
     public static void Main(string[] args)
     {
         var do_again = true;
+        int loop_max = 3;
+
+        if (args.Length != 0)
+        {
+            loop_max = int.Parse(args[0]);
+        }
 
         while (do_again)
         {
@@ -34,7 +40,6 @@ namespace PBHouse_CLI
             WordWrap ww = new WordWrap();
             DiceBagEngine diceBag = new DiceBagEngine();
 
-            int loop_max = 3;
             for (int loop = 1; loop <= loop_max; loop++)
             {
                 // ---- create an example PBHouse
@@ -106,7 +111,7 @@ namespace PBHouse_CLI
             var wait_on_valid_input = true;
             while (wait_on_valid_input)
             {
-                Console.WriteLine("Press [ESC] to exit, or [SPACE] to generate 3 more.");
+                Console.WriteLine($"Press [ESC] to exit, or [SPACE] to generate {loop_max} more.");
                 var user_keypress = Console.ReadKey();
                 if (user_keypress.Key == ConsoleKey.Escape)
                 {
