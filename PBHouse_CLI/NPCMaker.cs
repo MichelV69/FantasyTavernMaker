@@ -1,4 +1,5 @@
 using System;
+
 namespace PBHouse_CLI
 {
   class NPCMaker
@@ -32,8 +33,18 @@ namespace PBHouse_CLI
         this.NameDesc = NewNameDesc;
     } // end method NPCMaker
 
-
     // --- other class methods
+    public void RandomDetails()
+    {
+      // do some new do with the here do
+      string nothing = "goes nowhere";
+    }
+
+    public string toString()
+    {
+      // do some new do with the here do
+      return "toString did a thing";
+    }
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI

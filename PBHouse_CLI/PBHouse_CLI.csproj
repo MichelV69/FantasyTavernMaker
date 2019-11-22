@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DiceRollerEngine.cs" />
     <Compile Include="WordWrap.cs" />
+    <Compile Include="NPCMaker.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

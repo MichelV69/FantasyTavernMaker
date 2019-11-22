@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PBHouse_CLI
 {
@@ -49,7 +50,7 @@ namespace PBHouse_CLI
                 var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
                 var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
 
-                NPCMaker[] Person;
+                Dictionary<int, NPCMaker> NPCListing = new Dictionary <int, NPCMaker>();
 
                 Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
@@ -80,14 +81,19 @@ namespace PBHouse_CLI
                 Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
                 Console.WriteLine(" ");
 
-                Person[NPC_Owner] = new NPCMaker("Staff", "Owner");
-                Person[NPC_Owner].RandomDetails();
+                // --- new feature;  staff and patron NPCs
+                NPCListing.Add( NPC_Owner, new NPCMaker("Staff", "Owner") );
+                NPCListing[ NPC_Owner].RandomDetails();
+
                 // "modest", "large", "massive"
-                if (size.Contains("modest"))
-                {
-                  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
-                  Person[NPC_Cook].RandomDetails();
-                }
+                //if (size.Contains("modest"))
+                //{
+                //  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
+                //  Person[NPC_Cook].RandomDetails();
+                //}
+
+                Console.WriteLine("Notable Staff & Patrons");
+                Console.WriteLine(NPCListing[ NPC_Owner].toString());
 
             } // end-for
 
