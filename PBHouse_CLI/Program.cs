@@ -6,21 +6,25 @@ namespace PBHouse_CLI
   *   DOTNET learning project.  Use existing FantasyGrounds table-data
   *      to 'randomly roll' a 'P&B House' from my Scattered Isles
   *      DnD5e Campaign.
-  * 
+  *
   *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
   *   Last updated  : Sun, Sep 22, 2019 9:29 PM by m.vaillancourt
-  *   
+  *
   */
   class MainClass
   {
     public static int MaxTextWidthCols = 80;
     public static string MyAppName = "Fantasy Tavern Maker";
+    public static int NPC_Owner = 0;
+    public static int NPC_ChiefServer = 1;
+    public static int NPC_Cook = 2;
+
     public static void Main(string[] args)
     {
         var do_again = true;
-        
+
         while (do_again)
-        { 
+        {
             PrepConsole();
             Console.WriteLine("\n ------ ");
             Console.WriteLine(MyAppName);
@@ -44,6 +48,8 @@ namespace PBHouse_CLI
                 var foods = pbh.SpecialtyFood(quality_list.Item1);
                 var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
                 var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
+
+                NPCMaker[] Person;
 
                 Console.WriteLine($"\n --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
@@ -74,6 +80,15 @@ namespace PBHouse_CLI
                 Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
                 Console.WriteLine(" ");
 
+                Person[NPC_Owner] = new NPCMaker("Staff", "Owner");
+                Person[NPC_Owner].RandomDetails();
+                // "modest", "large", "massive"
+                if (size.Contains("modest"))
+                {
+                  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
+                  Person[NPC_Cook].RandomDetails();
+                }
+
             } // end-for
 
             Console.WriteLine("\n ------ ");
@@ -88,24 +103,24 @@ namespace PBHouse_CLI
                     do_again = false;
                     wait_on_valid_input = false;
                 }
-            
+
                 if (user_keypress.Key == ConsoleKey.Spacebar)
                 {
                     do_again = true;
                     wait_on_valid_input = false;
                 }
-                
+
             } // while (wait_on_valid_input)
         } // end while do_again
     } // end method main
 
     private static void PrepConsole()
     {
-      if (Console.BackgroundColor == ConsoleColor.Black) 
+      if (Console.BackgroundColor == ConsoleColor.Black)
         {
           Console.BackgroundColor = ConsoleColor.Gray;
           Console.ForegroundColor = ConsoleColor.DarkBlue;
-          
+
         }
         Console.Clear();
 

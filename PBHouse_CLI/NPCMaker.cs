@@ -36,4 +36,4 @@ namespace PBHouse_CLI
     // --- other class methods
 
   } // end class NPCMaker
-} end // namespace PBHouse_CLI
+}  // end namespace PBHouse_CLI
