@@ -13,74 +13,74 @@ using System.Collections;
 
 namespace PBHouse_CLI
 {
-    public class WordWrap
+  public class WordWrap
+  {
+    public string doWordWrap(string text, int width)
     {
-        public string doWordWrap(string text, int width)
+      int pos, next;
+      StringBuilder sb = new StringBuilder();
+
+      // Lucidity check
+      if (width < 1)
+        return text;
+
+      // Parse each line of text
+      for (pos = 0; pos < text.Length; pos = next)
+      {
+        // Find end of line
+        int eol = text.IndexOf(Environment.NewLine, pos);
+        if (eol == -1)
+          next = eol = text.Length;
+        else
+          next = eol + Environment.NewLine.Length;
+
+        // Copy this line of text, breaking into smaller lines as needed
+        if (eol > pos)
         {
-            int pos, next;
-            StringBuilder sb = new StringBuilder();
+          do
+          {
+            int len = eol - pos;
+            if (len > width)
+              len = BreakLine(text, pos, width);
+            sb.Append(text, pos, len);
+            sb.Append(Environment.NewLine);
 
-            // Lucidity check
-            if (width < 1)
-                return text;
-
-            // Parse each line of text
-            for (pos = 0; pos < text.Length; pos = next)
-            {
-                // Find end of line
-                int eol = text.IndexOf(Environment.NewLine, pos);
-                if (eol == -1)
-                    next = eol = text.Length;
-                else
-                    next = eol + Environment.NewLine.Length;
-
-                // Copy this line of text, breaking into smaller lines as needed
-                if (eol > pos)
-                {
-                    do
-                    {
-                        int len = eol - pos;
-                        if (len > width)
-                            len = BreakLine(text, pos, width);
-                        sb.Append(text, pos, len);
-                        sb.Append(Environment.NewLine);
-
-                        // Trim whitespace following break
-                        pos += len;
-                        while (pos < eol && Char.IsWhiteSpace(text[pos]))
-                            pos++;
-                    } while (eol > pos);
-                }
-                else sb.Append(Environment.NewLine); // Empty line
-            }
-            return sb.ToString();
+            // Trim whitespace following break
+            pos += len;
+            while (pos < eol && Char.IsWhiteSpace(text[pos]))
+              pos++;
+          } while (eol > pos);
         }
+        else sb.Append(Environment.NewLine); // Empty line
+      }
+      return sb.ToString().TrimEnd( Environment.NewLine.ToCharArray() );
+    }
 
-        /// <summary>
-        /// Locates position to break the given line so as to avoid
-        /// breaking words.
-        /// </summary>
-        /// <param name="text">String that contains line of text</param>
-        /// <param name="pos">Index where line of text starts</param>
-        /// <param name="max">Maximum line length</param>
-        /// <returns>The modified line length</returns>
-        private static int BreakLine(string text, int pos, int max)
-        {
-            // Find last whitespace in line
-            int i = max;
-            while (i >= 0 && !Char.IsWhiteSpace(text[pos + i]))
-                i--;
+    /// <summary>
+    /// Locates position to break the given line so as to avoid
+    /// breaking words.
+    /// </summary>
+    /// <param name="text">String that contains line of text</param>
+    /// <param name="pos">Index where line of text starts</param>
+    /// <param name="max">Maximum line length</param>
+    /// <returns>The modified line length</returns>
+    private static int BreakLine(string text, int pos, int max)
+    {
+      // Find last whitespace in line
+      int i = max;
+      while (i >= 0 && !Char.IsWhiteSpace(text[pos + i]))
+        i--;
 
-            // If no whitespace found, break at maximum length
-            if (i < 0)
-                return max;
+      // If no whitespace found, break at maximum length
+      if (i < 0)
+        return max;
 
-            // Find start of whitespace
-            while (i >= 0 && Char.IsWhiteSpace(text[pos + i]))
-                i--;
+      // Find start of whitespace
+      while (i >= 0 && Char.IsWhiteSpace(text[pos + i]))
+        i--;
 
-            // Return length of text before whitespace
-            return i + 1;
-        }
-    } // end class WordWrap
+      // Return length of text before whitespace
+      return i + 1;
+    }
+  } // end class WordWrap
 } // end namespace
