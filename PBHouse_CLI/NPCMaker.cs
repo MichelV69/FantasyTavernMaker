@@ -26,27 +26,12 @@ namespace PBHouse_CLI
     private string SchtickAbilityDescription { get; set; }
 
     // --- constructor
-    public static void NPCMaker(BDPO builder)
+    public NPCMaker(string TypeCodeText, string NewNameDesc)
     {
-        this.TypeCode = builder.TypeCode;
-        this.NameDesc = builder.NameDesc;
-    } // end method NPCMaker
-
-    // --- builder design pattern
-    public static class BDPO
-    {
-      // - required parameters
-      private int TypeCode;
-      private string NameDesc;
-
-      // - other optional parameters
-
-      public BDPO (string TypeCodeText, string NewNameDesc)
-      {
         this.TypeCode = Array.IndexOf(TypeCodeList, TypeCodeText);
         this.NameDesc = NewNameDesc;
-      } // end class constructor BDPO
-    } // end class BDPO
+    } // end method NPCMaker
+
 
     // --- other class methods
 
