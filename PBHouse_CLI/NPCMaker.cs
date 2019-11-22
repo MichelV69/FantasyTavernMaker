@@ -13,7 +13,8 @@ namespace PBHouse_CLI
     private int TypeCode { get; set; }
     private int SexualOrrientationCode { get; set; }
     private int GenderCode { get; set; }
-    private string NameDesc { get; set; }
+    private string PublicName { get; set; }
+    private string TaskDesc { get; set; }
     private string Race { get; set; }
     private string HeightDesc { get; set; }
     private string BuildDesc { get; set; }
@@ -27,10 +28,11 @@ namespace PBHouse_CLI
     private string SchtickAbilityDescription { get; set; }
 
     // --- constructor
-    public NPCMaker(string TypeCodeText, string NewNameDesc)
+    public NPCMaker(string TypeCodeText, string NewTaskDesc)
     {
+        this.PublicName = "(Character)";
         this.TypeCode = Array.IndexOf(TypeCodeList, TypeCodeText);
-        this.NameDesc = NewNameDesc;
+        this.TaskDesc = NewTaskDesc;
     } // end method NPCMaker
 
     // --- other class methods
@@ -43,7 +45,13 @@ namespace PBHouse_CLI
     public string toString()
     {
       // do some new do with the here do
-      return "toString did a thing";
+      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}";
+      return desc_line1;
+    }
+
+    public string getTypeCodeText()
+    {
+      return TypeCodeList[TypeCode];
     }
 
   } // end class NPCMaker

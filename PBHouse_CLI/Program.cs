@@ -27,7 +27,7 @@ namespace PBHouse_CLI
         while (do_again)
         {
             PrepConsole();
-            Console.WriteLine("\n ------ ");
+            Console.WriteLine("\n ------  ------  ------  ------  ------ ");
             Console.WriteLine(MyAppName);
 
             PBHouse pbh = new PBHouse();
@@ -52,7 +52,8 @@ namespace PBHouse_CLI
 
                 Dictionary<int, NPCMaker> NPCListing = new Dictionary <int, NPCMaker>();
 
-                Console.WriteLine($"\n --[{loop}]-- ");
+                Console.WriteLine("\n ------                           ------ ");
+                Console.WriteLine($"\n            --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
                 Console.WriteLine(ww.doWordWrap($"Establishment Quality: {quality_list.Item1};  Room {quality_list.Item2} & Board {quality_list.Item3}", MaxTextWidthCols));
                 Console.WriteLine($"Size: {size}");
@@ -64,6 +65,23 @@ namespace PBHouse_CLI
                 Console.WriteLine($"Specialty Food: {foods}");
                 Console.WriteLine(ww.doWordWrap($"Establishment History: {history}", MaxTextWidthCols));
                 Console.WriteLine(ww.doWordWrap($"Red Light Services: {naughty}", MaxTextWidthCols));
+                Console.WriteLine("\n ------                           ------ ");
+
+                // --- new feature;  staff and patron NPCs
+                NPCListing.Add( NPC_Owner, new NPCMaker("Staff", "Owner") );
+                NPCListing[ NPC_Owner].RandomDetails();
+
+                // "modest", "large", "massive"
+                //if (size.Contains("modest"))
+                //{
+                //  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
+                //  Person[NPC_Cook].RandomDetails();
+                //}
+
+                Console.WriteLine("Notable Staff & Patrons");
+                Console.WriteLine(NPCListing[ NPC_Owner].toString());
+
+                Console.WriteLine("\n ------                           ------ ");
 
                 var desc_line1 = $"\n  The local Pub and Bed House for travellers is the {name}." +
                     $" The {quality_list.Item1}-quality establishment would be considered {size}." +
@@ -80,20 +98,6 @@ namespace PBHouse_CLI
                 Console.WriteLine(ww.doWordWrap(desc_line2, MaxTextWidthCols));
                 Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
                 Console.WriteLine(" ");
-
-                // --- new feature;  staff and patron NPCs
-                NPCListing.Add( NPC_Owner, new NPCMaker("Staff", "Owner") );
-                NPCListing[ NPC_Owner].RandomDetails();
-
-                // "modest", "large", "massive"
-                //if (size.Contains("modest"))
-                //{
-                //  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
-                //  Person[NPC_Cook].RandomDetails();
-                //}
-
-                Console.WriteLine("Notable Staff & Patrons");
-                Console.WriteLine(NPCListing[ NPC_Owner].toString());
 
             } // end-for
 
