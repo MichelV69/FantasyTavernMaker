@@ -67,7 +67,7 @@ namespace PBHouse_CLI
         EyeColorTable.Add("grey", 2);
         EyeColorTable.Add("amber", 1);
 
-        HairColorTable.Add("raven", 70);
+        HairColorTable.Add("dark", 70);
         HairColorTable.Add("brown", 12);
         HairColorTable.Add("blonde", 6);
         HairColorTable.Add("white", 6);
@@ -121,8 +121,8 @@ namespace PBHouse_CLI
     {
       // do some new do with the here do
       string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
-        + $"They are {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
-        + $"They are {EyeColor}-eyed, with their {HairColor}-hair kept {HairStyle}. ";
+        + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
+        + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
       return desc_line1;
     }
 
