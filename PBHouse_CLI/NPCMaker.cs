@@ -42,7 +42,7 @@ namespace PBHouse_CLI
     public void RandomDetails()
     {
       // do some new do with the here do
-      // HeightDesc
+      HeightDesc  = getRandomHeightDesc();
       // BuildDesc
       GenderCode = getRandomGenderCode();
       // Race
@@ -62,8 +62,8 @@ namespace PBHouse_CLI
     public string toString()
     {
       // do some new do with the here do
-      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}.  They are a {HeightDesc} and {BuildDesc}"
-        + $" {GenderCode} ${Race}.  They are a {EyeColor}-eyed, {HairStyle}-coifed {HairColor}-hair.";
+      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}.  They are {HeightDesc} and {BuildDesc}"
+        + $" {getGenderCodeText()} ${Race}.  They are a {EyeColor}-eyed, {HairStyle}-coifed {HairColor}-hair.";
       return desc_line1;
     }
 
@@ -74,17 +74,17 @@ namespace PBHouse_CLI
 
     private int getRandomGenderCode()
     {
-      int d8_roll = diceBag.RollDice("1d8");
+      int roll_1d8 = diceBag.RollDice("1d8");
       int localGenderCode = -1;
-      if (1 <= d8_roll && d8_roll <= 5)
+      if (1 <= roll_1d8 && roll_1d8 <= 5)
       {
           localGenderCode = getGenderCodeByText("male");
       }
-      if (6 <= d8_roll && d8_roll <= 8)
+      if (6 <= roll_1d8 && roll_1d8 <= 8)
       {
           localGenderCode = getGenderCodeByText("female");
       }
-      if (9 <= d8_roll && d8_roll <= 10)
+      if (9 <= roll_1d8 && roll_1d8 <= 10)
       {
           localGenderCode = getGenderCodeByText("Androgenous");
       }
@@ -95,6 +95,50 @@ namespace PBHouse_CLI
     {
       return Array.FindIndex(GenderCodeList, data => data.ToLower() == GenderCodeText.ToLower() );
     } // end method getGenderCodeByText
+
+    private string getRandomHeightDesc()
+    {
+      string localHeightDesc = "average*";
+      int roll_2d6 = diceBag.RollDice("2d6");
+
+      if ( roll_2d6 == 2)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("very short (-[3d8+6]%)");
+      }
+      if ( roll_2d6 == 3)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("short (-[2d8+3]%)");
+      }
+      if (4 <= roll_2d6 && roll_2d6 <= 5)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("short-ish (-[1d8+1]%)");
+      }
+
+      if (6 <= roll_2d6 && roll_2d6 <= 8)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("average height ([2d4-4]%)");
+      }
+
+      if (9 <= roll_2d6 && roll_2d6 <= 10)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("tall-ish (+[1d8+1]%)");
+      }
+      if ( roll_2d6 == 11)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("tall (+[2d8+3]%)");
+      }
+      if ( roll_2d6 == 12)
+      {
+          localHeightDesc = diceBag.SearchStringForRolls("very tall (+[3d8+6]%)");
+      }
+
+      return localHeightDesc;
+    } // end method getRandomHeightDesc
+
+    public string getGenderCodeText()
+    {
+      return GenderCodeList[GenderCode];
+    } // end method getGenderCodeText
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI

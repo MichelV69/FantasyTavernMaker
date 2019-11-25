@@ -128,7 +128,6 @@ namespace PBHouse_CLI
             } // while (wait_on_valid_input)
         } // end while do_again
     } // end method main
-
     private static void PrepConsole()
     {
       if (Console.BackgroundColor == ConsoleColor.Black)
