@@ -39,6 +39,19 @@ namespace PBHouse_CLI
     public void RandomDetails()
     {
       // do some new do with the here do
+      // GenderCode
+      // Race
+      // HeightDesc
+      // BuildDesc
+      // EyeColor
+      // HairColor
+      // HairStyle
+      // QuirkEmotional
+      // QuirkPhysical
+      // NotableAttributePositive
+      // NotableAttributeNegative
+      // SexualOrrientationCode
+      // SchtickAbilityDescription
       string nothing = "goes nowhere";
     }
 
