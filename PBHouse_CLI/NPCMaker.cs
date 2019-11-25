@@ -43,8 +43,8 @@ namespace PBHouse_CLI
     {
       // do some new do with the here do
       HeightDesc  = getRandomHeightDesc();
-      // BuildDesc
-      GenderCode = getRandomGenderCode();
+      BuildDesc   = getRandomBuildDesc();
+      GenderCode  = getRandomGenderCode();
       // Race
 
       // EyeColor
@@ -139,6 +139,47 @@ namespace PBHouse_CLI
     {
       return GenderCodeList[GenderCode];
     } // end method getGenderCodeText
+
+
+    private string getRandomBuildDesc()
+    {
+      string localBuildDesc = "average*";
+      int roll_2d6 = diceBag.RollDice("2d6");
+
+      if ( roll_2d6 == 2)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("gaunt (-[3d8+6]%)");
+      }
+      if ( roll_2d6 == 3)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("lean (-[2d8+3]%)");
+      }
+      if (4 <= roll_2d6 && roll_2d6 <= 5)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("slightly angular (-[1d8+1]%)");
+      }
+
+      if (6 <= roll_2d6 && roll_2d6 <= 8)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("medium build ([2d4-4]%)");
+      }
+
+      if (9 <= roll_2d6 && roll_2d6 <= 10)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("slightly husky (+[1d8+1]%)");
+      }
+      if ( roll_2d6 == 11)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("stout (+[2d8+3]%)");
+      }
+      if ( roll_2d6 == 12)
+      {
+          localBuildDesc = diceBag.SearchStringForRolls("portly (+[3d8+6]%)");
+      }
+
+      return localBuildDesc;
+    } // end method getRandomBuildDesc
+
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
