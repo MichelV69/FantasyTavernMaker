@@ -7,8 +7,8 @@ namespace PBHouse_CLI
   {
     // --- static properties
     private static string[] TypeCodeList = {"Staff", "Warrior", "Spell-Caster", "Noble", "Merchant"};
-    private static string[] GenderCodeList = {"Male", "Female", "Androgenous"};
-    private static string[] SexualOrrientationCodeList = {"Hetro", "Bi", "Gay", "Asex"};
+    private static string[] GenderCodeList = {"male", "female", "androgenous"};
+    private static string[] SexualOrrientationCodeList = {"hetro", "bi", "gay", "asex"};
 
     private Dictionary<string, int> RacialDistribution =
     new Dictionary<string, int>();
@@ -17,6 +17,9 @@ namespace PBHouse_CLI
     new Dictionary<string, int>();
 
     private Dictionary<string, int> HairColorTable =
+    new Dictionary<string, int>();
+
+    private Dictionary<string, int> HairStyleTable =
     new Dictionary<string, int>();
 
     // --- other class includes
@@ -73,6 +76,24 @@ namespace PBHouse_CLI
         HairColorTable.Add("green", 1);
         HairColorTable.Add("blue", 1);
 
+        HairStyleTable.Add("shaved clean", 1);
+        HairStyleTable.Add("in a crew-cut", 1);
+        HairStyleTable.Add("in a top-knot", 1);
+        HairStyleTable.Add("in a short braid", 3);
+        HairStyleTable.Add("in a few short braids", 3);
+        HairStyleTable.Add("in a long braid", 1);
+        HairStyleTable.Add("in a trio of long braids", 1);
+        HairStyleTable.Add("in a bunch of beaded braids", 1);
+        HairStyleTable.Add("in a short ponytail", 5);
+        HairStyleTable.Add("in a long ponytail", 5);
+        HairStyleTable.Add("short and loose", 5);
+        HairStyleTable.Add("long and loose", 3);
+        HairStyleTable.Add("in short curls", 5);
+        HairStyleTable.Add("in long curls", 3);
+        HairStyleTable.Add("in a cropped mohawk", 1);
+        HairStyleTable.Add("in a short mohawk", 3);
+        HairStyleTable.Add("in a long mohawk", 1);
+
     } // end method NPCMaker
 
     // --- other class methods
@@ -86,7 +107,7 @@ namespace PBHouse_CLI
 
       EyeColor   =  RandomWeightedRoller("Blue*", EyeColorTable);
       HairColor  =  RandomWeightedRoller("Chestnut*", HairColorTable);
-      // HairStyle
+      HairStyle  =  RandomWeightedRoller("Oily*", HairStyleTable);
 
       // QuirkEmotional
       // QuirkPhysical
@@ -99,8 +120,9 @@ namespace PBHouse_CLI
     public string toString()
     {
       // do some new do with the here do
-      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}.  They are {HeightDesc} and {BuildDesc}"
-        + $" {getGenderCodeText()} ${Race}.  They are {EyeColor}-eyed, with {HairStyle}-coifed {HairColor}-hair.";
+      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
+        + $"They are {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
+        + $"They are {EyeColor}-eyed, with their {HairColor}-hair kept {HairStyle}. ";
       return desc_line1;
     }
 
@@ -243,7 +265,7 @@ namespace PBHouse_CLI
         // if we're between high and low, that's our race
         if (RangeLow <= RollToCompare && RollToCompare <= RangeHigh)
         {
-          ResultText = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(TableData.Key.ToLower());
+          ResultText = TableData.Key;
         }
       } // end foreach
 
