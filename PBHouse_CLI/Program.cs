@@ -16,9 +16,6 @@ namespace PBHouse_CLI
   {
     public static int MaxTextWidthCols = 80;
     public static string MyAppName = "Fantasy Tavern Maker";
-    public static int NPC_Owner = 0;
-    public static int NPC_ChiefServer = 1;
-    public static int NPC_Cook = 2;
 
     public static void Main(string[] args)
     {
@@ -55,8 +52,6 @@ namespace PBHouse_CLI
                 var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
                 var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
 
-                Dictionary<int, NPCMaker> NPCListing = new Dictionary <int, NPCMaker>();
-
                 Console.WriteLine("\n ------                           ------ ");
                 Console.WriteLine($"\n            --[{loop}]-- ");
                 Console.WriteLine($"Name:  {name}");
@@ -73,18 +68,18 @@ namespace PBHouse_CLI
                 Console.WriteLine("\n ------                           ------ ");
 
                 // --- new feature;  staff and patron NPCs
-                NPCListing.Add( NPC_Owner, new NPCMaker("Staff", "Owner") );
-                NPCListing[ NPC_Owner].RandomDetails();
+                NPCMaker NPC_Owner = new NPCMaker("Staff", "Owner") ;
+                NPC_Owner.RandomDetails();
 
                 Console.WriteLine("Notable Staff & Patrons");
-                Console.WriteLine(ww.doWordWrap(NPCListing[ NPC_Owner].toString(), MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap( NPC_Owner.toString(), MaxTextWidthCols));
 
                 // "modest", "large", "massive"
                 if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
                 {
-                  NPCListing.Add( NPC_Cook, new NPCMaker("Staff", "Cook") );
-                  NPCListing[ NPC_Cook].RandomDetails();
-                  Console.WriteLine(ww.doWordWrap(NPCListing[ NPC_Cook].toString(), MaxTextWidthCols));
+                  NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
+                  NPC_Cook.RandomDetails();
+                  Console.WriteLine(ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
                 }
 
                 Console.WriteLine("\n ------                           ------ ");

@@ -24,7 +24,6 @@ namespace PBHouse_CLI
 
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
-    private Random random = new Random((int)DateTime.Now.Ticks);
     // --- variable properties
     private int TypeCode { get; set; }
     private int SexualOrrientationCode { get; set; }
@@ -251,7 +250,7 @@ namespace PBHouse_CLI
       }
 
       // roll from 1 to total_weight
-      int RollToCompare = random.Next(1, total_weight);
+      int RollToCompare = diceBag.RawRoll1To(total_weight);
 
       // loop the race list
       int RangeLow  = 0;

@@ -104,5 +104,11 @@ namespace PBHouse_CLI
 
             return fixed_string.Replace("[","").Replace("]","");
         }
+
+        // -----
+        public int RawRoll1To(int MaxRoll)
+        {
+          return getRandomNumber(1, MaxRoll);
+        }
     } // end-class DiceBagEngine
 }
