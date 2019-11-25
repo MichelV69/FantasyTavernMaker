@@ -13,6 +13,9 @@ namespace PBHouse_CLI
     private Dictionary<string, int> RacialDistribution =
     new Dictionary<string, int>();
 
+    private Dictionary<string, int> EyeColorTable =
+    new Dictionary<string, int>();
+
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
     private Random random = new Random((int)DateTime.Now.Ticks);
@@ -51,6 +54,13 @@ namespace PBHouse_CLI
         RacialDistribution.Add("human", 7);
         RacialDistribution.Add("tiefling", 1);
 
+        EyeColorTable.Add("brown", 32);
+        EyeColorTable.Add("hazel", 16);
+        EyeColorTable.Add("blue", 8);
+        EyeColorTable.Add("green", 4);
+        EyeColorTable.Add("grey", 2);
+        EyeColorTable.Add("amber", 1);
+
     } // end method NPCMaker
 
     // --- other class methods
@@ -62,7 +72,7 @@ namespace PBHouse_CLI
       GenderCode  = getRandomGenderCode();
       Race  = getRandomRaceByWeightedRoll();
 
-      // EyeColor
+      EyeColor  = getRandomEyeColorByWeightedRoll();
       // HairColor
       // HairStyle
 
@@ -78,7 +88,7 @@ namespace PBHouse_CLI
     {
       // do some new do with the here do
       string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}.  They are {HeightDesc} and {BuildDesc}"
-        + $" {getGenderCodeText()} ${Race}.  They are a {EyeColor}-eyed, {HairStyle}-coifed {HairColor}-hair.";
+        + $" {getGenderCodeText()} ${Race}.  They are {EyeColor}-eyed, with {HairStyle}-coifed {HairColor}-hair.";
       return desc_line1;
     }
 
@@ -210,8 +220,8 @@ namespace PBHouse_CLI
       int RollToCompare = random.Next(1, total_weight);
 
       // loop the race list
-      int RangeLow  = 1;
-      int RangeHigh = 1;
+      int RangeLow  = 0;
+      int RangeHigh = 0;
       foreach (var RaceData in RacialDistribution)
       {
         // move high to low, and add the weight of the next race to high
@@ -228,6 +238,40 @@ namespace PBHouse_CLI
       return RaceText;
 
     } // end method getRandomRaceByWeightedRoll
+
+    private string getRandomEyeColorByWeightedRoll()
+    {
+      string EyeColorText = "Blue*";
+
+      // add up total_weight
+      int total_weight = 0;
+      foreach (var EyeColorData in EyeColorTable)
+      {
+        total_weight += EyeColorData.Value;
+      }
+
+      // roll from 1 to total_weight
+      int RollToCompare = random.Next(1, total_weight);
+
+      // loop the race list
+      int RangeLow  = 0;
+      int RangeHigh = 0;
+      foreach (var EyeColorData in EyeColorTable)
+      {
+        // move high to low, and add the weight of the next race to high
+        RangeLow = RangeHigh + 1;
+        RangeHigh += EyeColorData.Value;
+
+        // if we're between high and low, that's our race
+        if (RangeLow <= RollToCompare && RollToCompare <= RangeHigh)
+        {
+          EyeColorText = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(EyeColorData.Key.ToLower());
+        }
+      } // end foreach
+
+      return EyeColorText;
+    } // end method getRandomEyeColorByWeightedRoll
+
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
