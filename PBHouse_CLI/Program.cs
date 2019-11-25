@@ -76,15 +76,16 @@ namespace PBHouse_CLI
                 NPCListing.Add( NPC_Owner, new NPCMaker("Staff", "Owner") );
                 NPCListing[ NPC_Owner].RandomDetails();
 
-                // "modest", "large", "massive"
-                //if (size.Contains("modest"))
-                //{
-                //  Person[NPC_Cook] = new NPCMaker("Staff", "Cook");
-                //  Person[NPC_Cook].RandomDetails();
-                //}
-
                 Console.WriteLine("Notable Staff & Patrons");
-                Console.WriteLine(NPCListing[ NPC_Owner].toString());
+                Console.WriteLine(ww.doWordWrap(NPCListing[ NPC_Owner].toString(), MaxTextWidthCols));
+
+                // "modest", "large", "massive"
+                if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
+                {
+                  NPCListing.Add( NPC_Cook, new NPCMaker("Staff", "Cook") );
+                  NPCListing[ NPC_Cook].RandomDetails();
+                  Console.WriteLine(ww.doWordWrap(NPCListing[ NPC_Cook].toString(), MaxTextWidthCols));
+                }
 
                 Console.WriteLine("\n ------                           ------ ");
 
