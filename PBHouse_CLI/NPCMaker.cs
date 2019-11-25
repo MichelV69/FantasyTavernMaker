@@ -16,6 +16,9 @@ namespace PBHouse_CLI
     private Dictionary<string, int> EyeColorTable =
     new Dictionary<string, int>();
 
+    private Dictionary<string, int> HairColorTable =
+    new Dictionary<string, int>();
+
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
     private Random random = new Random((int)DateTime.Now.Ticks);
@@ -61,6 +64,15 @@ namespace PBHouse_CLI
         EyeColorTable.Add("grey", 2);
         EyeColorTable.Add("amber", 1);
 
+        HairColorTable.Add("raven", 70);
+        HairColorTable.Add("brown", 12);
+        HairColorTable.Add("blonde", 6);
+        HairColorTable.Add("white", 6);
+        HairColorTable.Add("silver-grey", 6);
+        HairColorTable.Add("red", 3);
+        HairColorTable.Add("green", 1);
+        HairColorTable.Add("blue", 1);
+
     } // end method NPCMaker
 
     // --- other class methods
@@ -70,10 +82,10 @@ namespace PBHouse_CLI
       HeightDesc  = getRandomHeightDesc();
       BuildDesc   = getRandomBuildDesc();
       GenderCode  = getRandomGenderCode();
-      Race  = getRandomRaceByWeightedRoll();
+      Race  = RandomWeightedRoller("Human*", RacialDistribution);
 
-      EyeColor  = getRandomEyeColorByWeightedRoll();
-      // HairColor
+      EyeColor   =  RandomWeightedRoller("Blue*", EyeColorTable);
+      HairColor  =  RandomWeightedRoller("Chestnut*", HairColorTable);
       // HairStyle
 
       // QuirkEmotional
@@ -238,17 +250,6 @@ namespace PBHouse_CLI
       return ResultText;
 
     } // end method RandomWeightedRoller
-
-    private string getRandomRaceByWeightedRoll()
-    {
-      return RandomWeightedRoller("Human*", RacialDistribution);
-
-    } // end method getRandomRaceByWeightedRoll
-
-    private string getRandomEyeColorByWeightedRoll()
-    {
-      return RandomWeightedRoller("Blue*", EyeColorTable);
-    } // end method getRandomEyeColorByWeightedRoll
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
