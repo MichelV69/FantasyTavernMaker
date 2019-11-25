@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PBHouse_CLI
 {
@@ -9,9 +10,12 @@ namespace PBHouse_CLI
     private static string[] GenderCodeList = {"Male", "Female", "Androgenous"};
     private static string[] SexualOrrientationCodeList = {"Hetro", "Bi", "Gay", "Asex"};
 
+    private Dictionary<string, int> RacialDistribution =
+    new Dictionary<string, int>();
+
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
-
+    private Random random = new Random((int)DateTime.Now.Ticks);
     // --- variable properties
     private int TypeCode { get; set; }
     private int SexualOrrientationCode { get; set; }
@@ -36,6 +40,17 @@ namespace PBHouse_CLI
         this.PublicName = "(Character)";
         this.TypeCode = Array.IndexOf(TypeCodeList, TypeCodeText);
         this.TaskDesc = NewTaskDesc;
+
+        RacialDistribution.Add("dragonborn", 1);
+        RacialDistribution.Add("dwarf", 5);
+        RacialDistribution.Add("elf", 4);
+        RacialDistribution.Add("gnome", 3);
+        RacialDistribution.Add("half-elf", 2);
+        RacialDistribution.Add("halfling", 4);
+        RacialDistribution.Add("half-orc", 1);
+        RacialDistribution.Add("human", 7);
+        RacialDistribution.Add("tiefling", 1);
+
     } // end method NPCMaker
 
     // --- other class methods
@@ -45,7 +60,7 @@ namespace PBHouse_CLI
       HeightDesc  = getRandomHeightDesc();
       BuildDesc   = getRandomBuildDesc();
       GenderCode  = getRandomGenderCode();
-      // Race
+      Race  = getRandomRaceByWeightedRoll();
 
       // EyeColor
       // HairColor
@@ -180,6 +195,39 @@ namespace PBHouse_CLI
       return localBuildDesc;
     } // end method getRandomBuildDesc
 
+    private string getRandomRaceByWeightedRoll()
+    {
+      string RaceText = "Human*";
+
+      // add up total_weight
+      int total_weight = 0;
+      foreach (var RaceData in RacialDistribution)
+      {
+        total_weight += RaceData.Value;
+      }
+
+      // roll from 1 to total_weight
+      int RollToCompare = random.Next(1, total_weight);
+
+      // loop the race list
+      int RangeLow  = 1;
+      int RangeHigh = 1;
+      foreach (var RaceData in RacialDistribution)
+      {
+        // move high to low, and add the weight of the next race to high
+        RangeLow = RangeHigh + 1;
+        RangeHigh += RaceData.Value;
+
+        // if we're between high and low, that's our race
+        if (RangeLow <= RollToCompare && RollToCompare <= RangeHigh)
+        {
+          RaceText = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(RaceData.Key.ToLower());
+        }
+      } // end foreach
+
+      return RaceText;
+
+    } // end method getRandomRaceByWeightedRoll
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
