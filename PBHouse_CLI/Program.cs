@@ -52,20 +52,20 @@ namespace PBHouse_CLI
                 var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
                 var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
 
-                Console.WriteLine("\n ------                           ------ ");
-                Console.WriteLine($"\n            --[{loop}]-- ");
+                Console.WriteLine($"\n                 --[{loop}]-- ");
+                Console.WriteLine(" ------          DM Notes           ------ ");
                 Console.WriteLine($"Name:  {name}");
                 Console.WriteLine(ww.doWordWrap($"Establishment Quality: {quality_list.Item1};  Room {quality_list.Item2} & Board {quality_list.Item3}", MaxTextWidthCols));
-                Console.WriteLine($"Size: {size}");
-                Console.WriteLine($"Current Mood: {mood}");
-                Console.WriteLine($"Lighting Environment: {lights}");
-                Console.WriteLine($"Smells of: {smells}");
-                Console.WriteLine($"Posted Sign: {posted_sign}");
-                Console.WriteLine($"Specialty Drink: {drinks}");
-                Console.WriteLine($"Specialty Food: {foods}");
+                Console.WriteLine(ww.doWordWrap($"Size: {size}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Current Mood: {mood}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Lighting Environment: {lights}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Smells of: {smells}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Posted Sign: {posted_sign}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Specialty Drink: {drinks}", MaxTextWidthCols));
+                Console.WriteLine(ww.doWordWrap($"Specialty Food: {foods}", MaxTextWidthCols));
                 Console.WriteLine(ww.doWordWrap($"Establishment History: {history}", MaxTextWidthCols));
                 Console.WriteLine(ww.doWordWrap($"Red Light Services: {naughty}", MaxTextWidthCols));
-                Console.WriteLine("\n ------                           ------ ");
+                Console.WriteLine(" ------                            ------ ");
 
                 // --- new feature;  staff and patron NPCs
                 NPCMaker NPC_Owner = new NPCMaker("Staff", "Owner") ;
@@ -74,7 +74,6 @@ namespace PBHouse_CLI
                 Console.WriteLine("Notable Staff & Patrons");
                 Console.WriteLine(ww.doWordWrap( NPC_Owner.toString(), MaxTextWidthCols));
 
-                // "modest", "large", "massive"
                 if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
                 {
                   NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
@@ -82,7 +81,24 @@ namespace PBHouse_CLI
                   Console.WriteLine(ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
                 }
 
-                Console.WriteLine("\n ------                           ------ ");
+                // "modest", "large", "massive"
+                if (size.Contains("large") || size.Contains("massive"))
+                {
+                  NPCMaker NPC_HeadServer = new NPCMaker("Staff", "Head Server") ;
+                  NPC_HeadServer.RandomDetails();
+                  Console.WriteLine(ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
+                }
+
+                if (size.Contains("massive"))
+                {
+                  NPCMaker NPC_Bouncer = new NPCMaker("Staff", "Bouncer") ;
+                  NPC_Bouncer.RandomDetails();
+                  Console.WriteLine(ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
+                }
+
+                // --- summary blurb output
+
+                Console.WriteLine("\n ------       Player Blurb        ------ ");
 
                 var desc_line1 = $"\n  The local Pub and Bed House for travellers is the {name}." +
                     $" The {quality_list.Item1}-quality establishment would be considered {size}." +
@@ -102,8 +118,8 @@ namespace PBHouse_CLI
 
             } // end-for
 
+            // prompt user about doing more or quiting
             Console.WriteLine("\n ------ ");
-            // Keep the console window open in debug mode.
             var wait_on_valid_input = true;
             while (wait_on_valid_input)
             {
