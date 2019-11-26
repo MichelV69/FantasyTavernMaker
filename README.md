@@ -3,7 +3,7 @@
 
 ## Current Version
 
-1.1.1
+1.2.0
 
 ## Purpose 
 
@@ -15,34 +15,52 @@ on-the-fly without complex table rolling that interrupts the flow of the story.
 Based on a few ideas I had  I decided to put together a simple DOT-Net / 
 C-Sharp application that would quickly handle this job.
 
+### Notable Changes for 1.2.x
+NPC Staff / Patron generation!  It's still pretty rough, but it does get a lot
+of the heavy lifting done.  As always, some intentional editing / curating is
+required by the DM/GM for use;  don't just blindly copy-paste.
+
 ## Sample Output
 
 ```
-Name:  the Summer Hen
-Establishment Quality: Modest;  Room 5sp & Board 3sp
-Size: tiny, with 6 tables. It has 3 hammocks in the common room and 0 private rooms
-Current Mood: subdued
-Lighting Environment: evenly lit by oil lamps
-Smells of: tobacco and foods cooking
-Posted Sign: just outside the door says '(colorful names of prior guests)'
-Specialty Drink: an imported Red Wine, for 7 copper
-Specialty Food: fermented pheasant, served with roasted forest nuts, for 6 copper
-Establishment History: The establishment is well established, and has been here for 10 months. 
-The building is in need of minor repairs to the exterior. A murder happened here.
+Name:  the Saucy Hen
+Establishment Quality: Wealthy;  Room 2gp & Board 8sp
+Size: small, with 9 tables. It has 7 bunk-beds in the common room and 1 private rooms
+Current Mood: seedy
+Lighting Environment: dimly lit by candles
+Smells of: wood smoke and hot spiced cider
+Posted Sign: over the bar says 'We Don't Serve Adventurers'
+Specialty Drink: the House's own Light Ale, for 7 silver
+Specialty Food: honey braised sausage, served with leeks, onions and cat-tails, for 9 silver
+Establishment History: The establishment is a permanent local fixture, and has
+been in business for 6 years. The building is in good condition, and shows
+evidence of regular care. A local milita band stops by here every 13 days as
+part of their patrol route.
 Red Light Services: <none>
 
-The local Pub and Bed House for travellers is the the Summer Hen. The Modest-quality 
-establishment would be considered tiny, with 6 tables. It has 3 hammocks in the 
-common room and 0 private rooms. Rooms are 5sp per day, and meals are 3sp per day.
+ ------                           ------
+Notable Staff & Patrons
+Staff : (Character) is the Owner. They are a male half-elf; short-ish (-5%) and
+medium build (3%). They are brown-eyed, with their dark hair kept in a top-knot.
 
-As you enter, you smell tobacco and foods cooking. It seems to be a subdued place, 
-evenly lit by oil lamps. A sign just outside the door says '(colorful names of prior guests)'.
+ ------                           ------
 
-The menu has the usual standard fare posted. The House Specialty Drink is an 
-imported Red Wine, for 7 copper, while the House Specialty Meal is fermented 
-pheasant, served with roasted forest nuts, for 6 copper.
+  The local Pub and Bed House for travellers is the the Saucy Hen. The
+Wealthy-quality establishment would be considered small, with 9 tables. It has 7
+bunk-beds in the common room and 1 private rooms. Rooms are 2gp per day, and
+meals are 8sp per day.
 
- Press [ESC] to exit, or [SPACE] to generate 3 more.
+  As you enter, you smell wood smoke and hot spiced cider. It seems to be a
+seedy place, dimly lit by candles. A sign over the bar says 'We Don't Serve
+Adventurers'.
+
+  The menu has the usual standard fare posted. The House Specialty Drink is the
+House's own Light Ale, for 7 silver, while the House Specialty Meal is honey
+braised sausage, served with leeks, onions and cat-tails, for 9 silver.
+
+
+ ------
+Press [ESC] to exit, or [SPACE] to generate 3 more.
 ```
 
 ## How To Use
@@ -50,8 +68,11 @@ pheasant, served with roasted forest nuts, for 6 copper.
 + Download the installer
 + Install to where-ever makes the most sense for you
 + Run the installed EXE
+    + An optional command line parameter is how big the batch of Pub/Inns is.
+    So `PBHouse_CLI.exe 1` will create one-at-a-time, where as `PBHouse_CLI.exe 7`
+    will create 7 in a run.  By default, 3 are created.
 + No input is required;  output is automatically created.
-+ Review the 3 generated Pub/Inn;  mix and match as you like to get one or two
++ Review the batch of generated Pubs & Inns;  mix and match as you like to get one or two
 that suit your setting.  Copy-Paste results to your favorite text editor.
-+ To generate 3 more possible Inns & Taverns, press the [SPACE] bar
++ To generate another batch of Inns & Taverns, press the [SPACE] bar
 + To finish up, press your [ESC] ("Escape") key
