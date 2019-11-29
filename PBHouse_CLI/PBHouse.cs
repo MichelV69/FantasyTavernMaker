@@ -342,41 +342,15 @@ namespace PBHouse_CLI
 
 
             //--  build the content
-            coin_type = "copper";
-            int cost_floor = 0;
-            string dice_to_roll = "";
+            var cost_of_goods_list = CostOfGoodsIndex(inn_quality);  // coin_type, cost_floor, dice_to_roll
 
-            switch (inn_quality)
-            {
-              case "Squalid":
-                cost_floor = 2;
-                dice_to_roll = "1d4+1";
-                break;
-              case "Poor":
-                cost_floor = 3;
-                dice_to_roll = "1d4+1";
-                break;
-              case "Modest":
-                cost_floor = 15;
-                dice_to_roll = "4d6+2";
-                break;
-              case "Comfortable":
-                cost_floor = 20;
-                dice_to_roll = "5d8+3";
-                break;
-              case "Wealthy":
-                cost_floor = 30;
-                dice_to_roll = "5d12+6";
-                break;
-              case "Aristocratic":
-                cost_floor = 8;
-                dice_to_roll = "2d6+2";
-                coin_type = "silver";
-                break;
-            }
+            coin_type = cost_of_goods_list.Item1;
+            int cost_floor = cost_of_goods_list.Item2;
+            string dice_to_roll = cost_of_goods_list.Item3;
 
             int cost_of_goods = Math.Max(cost_floor, diceBag.RollDice(dice_to_roll));
 
+            //-- figure out where it's made for flavor
             switch (diceBag.RollDice("1d6"))
             {
                 case 1:
@@ -423,38 +397,11 @@ namespace PBHouse_CLI
             served_with = File.ReadAllLines(fileToLoad).ToList();
 
             //--  build the content
-            coin_type = "copper";
-            int cost_floor = 0;
-            string dice_to_roll = "";
+            var cost_of_goods_list = CostOfGoodsIndex(inn_quality);  // coin_type, cost_floor, dice_to_roll
 
-            switch (inn_quality)
-            {
-              case "Squalid":
-                cost_floor = 2;
-                dice_to_roll = "1d4+1";
-                break;
-              case "Poor":
-                cost_floor = 3;
-                dice_to_roll = "1d4+1";
-                break;
-              case "Modest":
-                cost_floor = 15;
-                dice_to_roll = "4d6+2";
-                break;
-              case "Comfortable":
-                cost_floor = 20;
-                dice_to_roll = "5d8+3";
-                break;
-              case "Wealthy":
-                cost_floor = 30;
-                dice_to_roll = "5d12+6";
-                break;
-              case "Aristocratic":
-                cost_floor = 8;
-                dice_to_roll = "2d6+2";
-                coin_type = "silver";
-                break;
-            }
+            coin_type = cost_of_goods_list.Item1;
+            int cost_floor = cost_of_goods_list.Item2;
+            string dice_to_roll = cost_of_goods_list.Item3;
 
             int cost_of_goods = Math.Max(cost_floor, diceBag.RollDice(dice_to_roll));
 
@@ -663,6 +610,44 @@ namespace PBHouse_CLI
                     break;
             }
             return (quality, rooms, meals);
+        }
+
+        private (string, int, string) CostOfGoodsIndex(string establishmentQuality)
+        {
+          string coin_type = "copper";
+          int cost_floor = 0;
+          string dice_to_roll = "";
+
+          switch (establishmentQuality)
+          {
+            case "Squalid":
+              cost_floor = 2;
+              dice_to_roll = "1d4+1";
+              break;
+            case "Poor":
+              cost_floor = 3;
+              dice_to_roll = "1d4+1";
+              break;
+            case "Modest":
+              cost_floor = 15;
+              dice_to_roll = "4d6+2";
+              break;
+            case "Comfortable":
+              cost_floor = 20;
+              dice_to_roll = "5d8+3";
+              break;
+            case "Wealthy":
+              cost_floor = 30;
+              dice_to_roll = "5d12+6";
+              break;
+            case "Aristocratic":
+              cost_floor = 8;
+              dice_to_roll = "2d6+2";
+              coin_type = "silver";
+              break;
+          }
+
+          return (coin_type, cost_floor, dice_to_roll);
         }
     } // class PBHouse
 }
