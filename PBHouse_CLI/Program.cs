@@ -10,7 +10,7 @@ namespace PBHouse_CLI
   *      DnD5e Campaign.
   *
   *   First created : Thu 22-Aug-2019 @ 15:23 ADT by m.vaillancourt
-  *   Last updated  : Sun, Sep 22, 2019 9:29 PM by m.vaillancourt
+  *   Last updated  : Fri 11/29/2019 07h21 AST by m.vaillancourt
   *
   */
   class MainClass
@@ -51,7 +51,7 @@ namespace PBHouse_CLI
               var size = pbh.Size();
               var posted_sign = diceBag.SearchStringForRolls(pbh.PostedSign());
               var drinks = diceBag.SearchStringForRolls(pbh.SpecialtyDrink(quality_list.Item1));
-              var foods = pbh.SpecialtyFood(quality_list.Item1);
+              var foods = diceBag.SearchStringForRolls(pbh.SpecialtyFood(quality_list.Item1));
               var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
               var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
 
