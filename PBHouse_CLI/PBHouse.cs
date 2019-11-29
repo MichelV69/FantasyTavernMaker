@@ -5,14 +5,13 @@ using System.IO;
 
 /*
  * First created Mon, Sep 16, 2019 10:22 PM by m.vaillancourt
- *  Last updated Sun, Sep 22, 2019 7:44 PM by m.vaillancourt
+ *  Last updated  Fri 11/29/2019 6:11 AM by m.vaillancourt
 */
 
 namespace PBHouse_CLI
 {
     class PBHouse
     {
-        private Random random = new Random((int)DateTime.Now.Ticks);
         private DiceBagEngine diceBag = new DiceBagEngine();
 
         // -----
@@ -21,10 +20,7 @@ namespace PBHouse_CLI
             // given a list of strings, determine the size of the list and
             // ... random roll to choose one to return
 
-            int min = 0;
-            int max = pick_list.Count - 1;
-            int index = random.Next(min, max);
-
+            int index = diceBag.RawRoll1To(pick_list.Count) - 1;
             string picked_word = pick_list[index];
             return picked_word;
 
@@ -290,7 +286,7 @@ namespace PBHouse_CLI
         // -----
         public string PostedSign()
         {
-            // random select from list of messages and sign locations 
+            // random select from list of messages and sign locations
             string sign_description = "";
 
             // ... create list
@@ -347,10 +343,39 @@ namespace PBHouse_CLI
 
             //--  build the content
             coin_type = "copper";
-            if (inn_quality == "Wealthy" || inn_quality == "Aristocratic")
+            int cost_floor = 0;
+            string dice_to_roll = "";
+
+            switch (inn_quality)
             {
+              case "Squalid":
+                cost_floor = 2;
+                dice_to_roll = "1d4+1";
+                break;
+              case "Poor":
+                cost_floor = 3;
+                dice_to_roll = "1d4+1";
+                break;
+              case "Modest":
+                cost_floor = 15;
+                dice_to_roll = "4d6+2";
+                break;
+              case "Comfortable":
+                cost_floor = 20;
+                dice_to_roll = "5d8+3";
+                break;
+              case "Wealthy":
+                cost_floor = 30;
+                dice_to_roll = "5d12+6";
+                break;
+              case "Aristocratic":
+                cost_floor = 8;
+                dice_to_roll = "2d6+2";
                 coin_type = "silver";
+                break;
             }
+
+            int cost_of_goods = Math.Max(cost_floor, diceBag.RollDice(dice_to_roll));
 
             switch (diceBag.RollDice("1d6"))
             {
@@ -366,7 +391,7 @@ namespace PBHouse_CLI
                     break;
             } // end-switch
 
-            specialty_drink_description = $"{where_made} {PickFromList(drink_list)}, for {diceBag.RollDice("2d4+3")} {coin_type}";
+            specialty_drink_description = $"{where_made} {PickFromList(drink_list)}, for {cost_of_goods} {coin_type}";
 
             //  return some content
             return specialty_drink_description;
@@ -399,12 +424,42 @@ namespace PBHouse_CLI
 
             //--  build the content
             coin_type = "copper";
-            if (inn_quality == "Wealthy" || inn_quality == "Aristocratic")
+            int cost_floor = 0;
+            string dice_to_roll = "";
+
+            switch (inn_quality)
             {
+              case "Squalid":
+                cost_floor = 2;
+                dice_to_roll = "1d4+1";
+                break;
+              case "Poor":
+                cost_floor = 3;
+                dice_to_roll = "1d4+1";
+                break;
+              case "Modest":
+                cost_floor = 15;
+                dice_to_roll = "4d6+2";
+                break;
+              case "Comfortable":
+                cost_floor = 20;
+                dice_to_roll = "5d8+3";
+                break;
+              case "Wealthy":
+                cost_floor = 30;
+                dice_to_roll = "5d12+6";
+                break;
+              case "Aristocratic":
+                cost_floor = 8;
+                dice_to_roll = "2d6+2";
                 coin_type = "silver";
+                break;
             }
 
-            specialty_food_description = $"{PickFromList(how_cooked)} {PickFromList(what_food)}, served with {PickFromList(served_with)}, for {diceBag.RollDice("2d4+3")} {coin_type}";
+            int cost_of_goods = Math.Max(cost_floor, diceBag.RollDice(dice_to_roll));
+
+            specialty_food_description = $"{PickFromList(how_cooked)} {PickFromList(what_food)}, served with " +
+                                         $"{PickFromList(served_with)}, for {cost_of_goods} {coin_type}";
 
             //  return some content
             return specialty_food_description;
@@ -572,7 +627,7 @@ namespace PBHouse_CLI
             switch (diceBag.RollDice("2d6"))
             {
                 case 2:
-                    quality = "Squalid ";
+                    quality = "Squalid";
                     rooms = "7cp";
                     meals = "3cp";
                     break;
