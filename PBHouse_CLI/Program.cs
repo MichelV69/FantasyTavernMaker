@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace PBHouse_CLI
@@ -34,7 +35,9 @@ namespace PBHouse_CLI
         {
             PrepConsole();
             Console.WriteLine( "\n" + DashLineText("------   ------   ------") );
-            Console.WriteLine( DashLineText(MyAppName) );
+            string versionText = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var titleText = $"{MyAppName} - version {versionText}";
+            Console.WriteLine( DashLineText(titleText) );
 
             PBHouse pbh = new PBHouse();
             WordWrap ww = new WordWrap();
