@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace PBHouse_CLI
 {
@@ -96,6 +98,7 @@ namespace PBHouse_CLI
     } // end method NPCMaker
 
     // --- other class methods
+
     public void RandomDetails()
     {
       // do some new do with the here do
@@ -109,7 +112,7 @@ namespace PBHouse_CLI
       HairStyle  =  RandomWeightedRoller("Oily*", HairStyleTable);
 
       // QuirkEmotional
-      // QuirkPhysical
+      QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader())
       // NotableAttributePositive
       // NotableAttributeNegative
       // SexualOrrientationCode
@@ -272,5 +275,22 @@ namespace PBHouse_CLI
 
     } // end method RandomWeightedRoller
 
+    private Dictionary<string, int> QuirkPhysicalTableReader()
+    {
+      private string fileToLoad = "";
+      private Dictionary<string, int> QuirkPhysicalTable = new Dictionary<string, int>();
+
+      fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
+      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
+
+      foreach fileData (line =>
+      {
+        string textValue = line.Split("|").First();
+        int rollWeight = line.Split("|").Last();
+        QuirkPhysicalTable.Add(textValue, rollWeight);
+      })
+
+      return QuirkPhysicalTable;
+    }
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
