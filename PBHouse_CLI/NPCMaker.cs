@@ -112,7 +112,7 @@ namespace PBHouse_CLI
       HairStyle  =  RandomWeightedRoller("Oily*", HairStyleTable);
 
       // QuirkEmotional
-      QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader())
+      QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
       // NotableAttributePositive
       // NotableAttributeNegative
       // SexualOrrientationCode
@@ -277,18 +277,27 @@ namespace PBHouse_CLI
 
     private Dictionary<string, int> QuirkPhysicalTableReader()
     {
-      private string fileToLoad = "";
-      private Dictionary<string, int> QuirkPhysicalTable = new Dictionary<string, int>();
-
-      fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
+      Dictionary<string, int> QuirkPhysicalTable = new Dictionary<string, int>();
+      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
       List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
 
-      foreach fileData (line =>
+      // ---- first, load the rough table
+      string[] sideName = {"left", "right"};
+      string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
+      fileData.ForEach(line =>
       {
-        string textValue = line.Split("|").First();
-        int rollWeight = line.Split("|").Last();
+        int rollWeight = Int32.Parse(line.Split('|').First());
+        string textValue = line.Split('|').Last().TrimStart(' ');
+
+        if (textValue != "-no-")
+        {
+          int sideIndex = diceBag.RawRoll1To(sideName.Count() - 1);
+          int locationIndex = diceBag.RawRoll1To(locationNames.Count() - 1);
+          textValue = $"{textValue} on their {sideName[sideIndex]} {locationNames[locationIndex]}";
+        }
+
         QuirkPhysicalTable.Add(textValue, rollWeight);
-      })
+      });
 
       return QuirkPhysicalTable;
     }
