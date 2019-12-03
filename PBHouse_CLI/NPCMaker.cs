@@ -122,10 +122,20 @@ namespace PBHouse_CLI
     public string toString()
     {
       // do some new do with the here do
-      string desc_line1 = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
+
+      string visible = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
         + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
         + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
-      return desc_line1;
+
+      string qpText = "";
+      if (QuirkPhysical != "-no-")
+      {
+        qpText = $"{PublicName} has a {QuirkPhysical}";
+      }
+      string invisible = $"{qpText}. ";
+
+      string paragraph = $"{visible}\n({invisible})";
+      return paragraph;
     }
 
     public string getTypeCodeText()
