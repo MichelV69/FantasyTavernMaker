@@ -88,7 +88,7 @@ namespace PBHouse_CLI
               {
                 NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
                 NPC_Cook.RandomDetails();
-                Console.WriteLine(ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
+                Console.WriteLine( "\n " + ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
               }
 
               // "modest", "large", "massive"
@@ -96,14 +96,14 @@ namespace PBHouse_CLI
               {
                 NPCMaker NPC_HeadServer = new NPCMaker("Staff", "Head Server") ;
                 NPC_HeadServer.RandomDetails();
-                Console.WriteLine(ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
+                Console.WriteLine( "\n " + ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
               }
 
               if (size.Contains("massive"))
               {
                 NPCMaker NPC_Bouncer = new NPCMaker("Staff", "Bouncer") ;
                 NPC_Bouncer.RandomDetails();
-                Console.WriteLine(ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
+                Console.WriteLine( "\n " + ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
               }
 
               Console.WriteLine("\n" + DashLineText("DM Notes") );

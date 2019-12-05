@@ -111,7 +111,7 @@ namespace PBHouse_CLI
       HairColor  =  RandomWeightedRoller("Chestnut*", HairColorTable);
       HairStyle  =  RandomWeightedRoller("Oily*", HairStyleTable);
 
-      // QuirkEmotional
+      QuirkEmotional = RandomWeightedRoller("just fine, thanks", QuirkEmotionalTableReader());
       QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
       // NotableAttributePositive
       // NotableAttributeNegative
@@ -130,11 +130,21 @@ namespace PBHouse_CLI
       string qpText = "";
       if (QuirkPhysical != "-no-")
       {
-        qpText = $"{PublicName} has a {QuirkPhysical}";
+        qpText = $"They have a {QuirkPhysical}. ";
       }
-      string invisible = $"{qpText}. ";
+      string qeText = "";
+      if (QuirkEmotional != "-no-")
+      {
+        qeText = $"They {QuirkEmotional}. ";
+      }
 
-      string paragraph = $"{visible}\n({invisible})";
+      string invisible = "";
+      if ( (qpText+qeText).Length > 3)
+      {
+        invisible = $"({PublicName} has quirks.  {qpText} {qeText})";
+      }
+
+      string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
 
@@ -291,7 +301,6 @@ namespace PBHouse_CLI
       string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
       List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
 
-      // ---- first, load the rough table
       string[] sideName = {"left", "right"};
       string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
       fileData.ForEach(line =>
@@ -310,6 +319,31 @@ namespace PBHouse_CLI
       });
 
       return QuirkPhysicalTable;
-    }
+    } // end method QuirkPhysicalTableReader
+
+    private Dictionary<string, int> QuirkEmotionalTableReader()
+    {
+      Dictionary<string, int> QuirkEmotionalTable = new Dictionary<string, int>();
+      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkEmotionalTable.data");
+      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
+
+      string[] prepPhrase = {"can sometimes be", "are often", "tend to be"};
+      fileData.ForEach(line =>
+      {
+        int rollWeight = Int32.Parse(line.Split('|').First());
+        string textValue = line.Split('|').Last().TrimStart(' ');
+
+        if (textValue != "-no-")
+        {
+          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
+          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
+        }
+
+        QuirkEmotionalTable.Add(textValue, rollWeight);
+      });
+
+      return QuirkEmotionalTable;
+    } // end method QuirkEmotionalTableReader
+
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
