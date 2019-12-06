@@ -10,7 +10,6 @@ namespace PBHouse_CLI
     // --- static properties
     private static string[] TypeCodeList = {"Staff", "Warrior", "Spell-Caster", "Noble", "Merchant"};
     private static string[] GenderCodeList = {"male", "female", "androgenous"};
-    private static string[] SexualOrrientationCodeList = {"hetro", "bi", "gay", "asex"};
 
     private Dictionary<string, int> RacialDistribution =
     new Dictionary<string, int>();
@@ -28,7 +27,7 @@ namespace PBHouse_CLI
     private DiceBagEngine diceBag = new DiceBagEngine();
     // --- variable properties
     private int TypeCode { get; set; }
-    private int SexualOrrientationCode { get; set; }
+    private string SexualOrientationText { get; set; }
     private int GenderCode { get; set; }
     private string PublicName { get; set; }
     private string TaskDesc { get; set; }
@@ -98,7 +97,6 @@ namespace PBHouse_CLI
     } // end method NPCMaker
 
     // --- other class methods
-
     public void RandomDetails()
     {
       // do some new do with the here do
@@ -115,7 +113,7 @@ namespace PBHouse_CLI
       QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
       // NotableAttributePositive
       // NotableAttributeNegative
-      // SexualOrrientationCode
+      SexualOrientationText = RandomWeightedRoller("mind your own affairs, thanks", SexualOrientationTextTableReader());
       // SchtickAbilityDescription
     }
 
@@ -137,13 +135,19 @@ namespace PBHouse_CLI
       {
         qeText = $"They {QuirkEmotional}. ";
       }
-
-      string invisible = "";
-      if ( (qpText+qeText).Length > 3)
+      string socText = "";
+      if (SexualOrientationText != "-no-")
       {
-        invisible = $"({PublicName} has quirks.  {qpText} {qeText})";
+        socText = $"They {SexualOrientationText}. ";
       }
 
+      string quirkText = "";
+      if ( (qpText+qeText).Length > 3)
+      {
+        quirkText = $"(Quirks:  {qpText} {qeText} )";
+      }
+
+      string invisible = $"[{PublicName} Notes: {socText} {quirkText}]";
       string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
@@ -343,6 +347,34 @@ namespace PBHouse_CLI
       });
 
       return QuirkEmotionalTable;
+    } // end method QuirkEmotionalTableReader
+
+    private Dictionary<string, int> SexualOrientationTextTableReader()
+    {
+      Dictionary<string, int> SexualOrientationTextTable = new Dictionary<string, int>();
+      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.SexualOrientationTextList.data");
+      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
+
+      string[] prepPhrase =
+      {
+        "are quietly", "are flirtatiously", "consider themselves", "consider themselves", "consider themselves",
+        "consider themselves"
+      };
+      fileData.ForEach(line =>
+      {
+        int rollWeight = Int32.Parse(line.Split('|').First());
+        string textValue = line.Split('|').Last().TrimStart(' ');
+
+        if (textValue != "-no-")
+        {
+          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
+          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
+        }
+
+        SexualOrientationTextTable.Add(textValue, rollWeight);
+      });
+
+      return SexualOrientationTextTable;
     } // end method QuirkEmotionalTableReader
 
   } // end class NPCMaker
