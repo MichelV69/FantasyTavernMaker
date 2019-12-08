@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -23,7 +23,7 @@ namespace PBHouse_CLI
     public static void Main(string[] args)
     {
         var do_again = true;
-        int loop_max = 3;
+        int loop_max = 1;
 
         if (args.Length != 0)
         {
