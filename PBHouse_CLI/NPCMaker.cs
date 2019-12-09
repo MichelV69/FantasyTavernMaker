@@ -299,82 +299,72 @@ namespace PBHouse_CLI
 
     } // end method RandomWeightedRoller
 
-    private Dictionary<string, int> QuirkPhysicalTableReader()
+    private Dictionary<string, int> LoadDictionaryTableFromFile(string FileToLoad,  string DetailFormatString, string[] DetailArray1,
+      string[] DetailArray2)
     {
-      Dictionary<string, int> QuirkPhysicalTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
+      Dictionary<string, int> dictionaryTableFromFile = new Dictionary<string, int>();
+      string fileToLoad = Path.Combine(Environment.CurrentDirectory, $"table_data/{FileToLoad}");
       List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
 
-      string[] sideName = {"left", "right"};
-      string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
       fileData.ForEach(line =>
       {
         int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
+        string textValue = line.Split('|').Last().Trim();
 
         if (textValue != "-no-")
         {
-          int sideIndex = diceBag.RawRoll1To(sideName.Count() - 1);
-          int locationIndex = diceBag.RawRoll1To(locationNames.Count() - 1);
-          textValue = $"{textValue} on their {sideName[sideIndex]} {locationNames[locationIndex]}";
+          int detailArray1Index = diceBag.RawRoll1To(DetailArray1.Count() - 1);
+          string detailString1 = DetailArray1[detailArray1Index];
+          string detailString2 = "";
+
+          if (DetailArray2.Any())
+          {
+            int detailArray2Index = diceBag.RawRoll1To(DetailArray2.Count() - 1);
+            detailString2 = DetailArray2[detailArray2Index];
+          }
+
+          textValue = string.Format(DetailFormatString, textValue, detailString1,
+            detailString2);
         }
 
-        QuirkPhysicalTable.Add(textValue, rollWeight);
+        dictionaryTableFromFile.Add(textValue, rollWeight);
       });
 
-      return QuirkPhysicalTable;
+      return dictionaryTableFromFile;
+    } // end method LoadDictionaryTableFromFile
+
+    private Dictionary<string, int> QuirkPhysicalTableReader()
+    {
+      string fileToLoad = "NPCMaker.QuirkPhysicalTable.data";
+      string detailFormatString = "{0} on their {1} {2}";
+      string[] sideName = {"left", "right"};
+      string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
+
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, sideName, locationNames);
     } // end method QuirkPhysicalTableReader
 
     private Dictionary<string, int> QuirkEmotionalTableReader()
     {
-      Dictionary<string, int> QuirkEmotionalTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkEmotionalTable.data");
-      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
-
+      string fileToLoad = "NPCMaker.QuirkEmotionalTable.data";
+      string detailFormatString = "{1} {0}";
       string[] prepPhrase = {"can sometimes be", "are often", "tend to be"};
-      fileData.ForEach(line =>
-      {
-        int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
+      string[] unused = { };
 
-        if (textValue != "-no-")
-        {
-          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
-          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
-        }
-
-        QuirkEmotionalTable.Add(textValue, rollWeight);
-      });
-
-      return QuirkEmotionalTable;
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, prepPhrase, unused);
     } // end method QuirkEmotionalTableReader
 
     private Dictionary<string, int> SexualOrientationTextTableReader()
     {
-      Dictionary<string, int> SexualOrientationTextTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.SexualOrientationTextList.data");
-      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
-
+      string fileToLoad = "NPCMaker.SexualOrientationTextList.data";
+      string detailFormatString = "{1} {0}";
+      string[] unused = { };
       string[] prepPhrase =
       {
         "are quietly", "are flirtatiously", "consider themselves", "consider themselves", "consider themselves",
         "consider themselves"
       };
-      fileData.ForEach(line =>
-      {
-        int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
 
-        if (textValue != "-no-")
-        {
-          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
-          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
-        }
-
-        SexualOrientationTextTable.Add(textValue, rollWeight);
-      });
-
-      return SexualOrientationTextTable;
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, prepPhrase, unused);
     } // end method QuirkEmotionalTableReader
 
   } // end class NPCMaker
