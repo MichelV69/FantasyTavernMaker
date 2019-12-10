@@ -100,10 +100,13 @@ namespace PBHouse_CLI
     public void RandomDetails()
     {
       // do some new do with the here do
+      Race  = RandomWeightedRoller("Human*", RacialDistribution);
+
       HeightDesc  = getRandomHeightDesc();
       BuildDesc   = getRandomBuildDesc();
+
       GenderCode  = getRandomGenderCode();
-      Race  = RandomWeightedRoller("Human*", RacialDistribution);
+      SexualOrientationText = RandomWeightedRoller("mind your own affairs, thanks", SexualOrientationTextTableReader());
 
       EyeColor   =  RandomWeightedRoller("Blue*", EyeColorTable);
       HairColor  =  RandomWeightedRoller("Chestnut*", HairColorTable);
@@ -111,9 +114,10 @@ namespace PBHouse_CLI
 
       QuirkEmotional = RandomWeightedRoller("just fine, thanks", QuirkEmotionalTableReader());
       QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
-      // NotableAttributePositive
+
+      NotableAttributePositive = getNotableAttributePositive();
       // NotableAttributeNegative
-      SexualOrientationText = RandomWeightedRoller("mind your own affairs, thanks", SexualOrientationTextTableReader());
+
       // SchtickAbilityDescription
     }
 
@@ -125,6 +129,12 @@ namespace PBHouse_CLI
         + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
         + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
 
+      string socText = "";
+      if (SexualOrientationText != "-no-")
+      {
+        socText = $"They {SexualOrientationText}. ";
+      }
+
       string qpText = "";
       if (QuirkPhysical != "-no-")
       {
@@ -135,19 +145,14 @@ namespace PBHouse_CLI
       {
         qeText = $"They {QuirkEmotional}. ";
       }
-      string socText = "";
-      if (SexualOrientationText != "-no-")
-      {
-        socText = $"They {SexualOrientationText}. ";
-      }
 
       string quirkText = "";
-      if ( (qpText+qeText).Length > 3)
+      if ( (qpText + qeText).Length > 3)
       {
-        quirkText = $"(Quirks:  {qpText} {qeText} )";
+        quirkText = $"(Quirks:  {qpText} {qeText})";
       }
 
-      string invisible = $"[{PublicName} Notes: {socText} {quirkText}]";
+      string invisible = $"[{PublicName} Notes: {socText} {quirkText} {NotableAttributePositive}]";
       string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
@@ -366,6 +371,42 @@ namespace PBHouse_CLI
 
       return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, prepPhrase, unused);
     } // end method QuirkEmotionalTableReader
+
+    private string getNotableAttributePositive()
+    {
+      string RandomNotableAttributePositiveText = "";
+
+      // roll how many attributes there are
+      string[] unusedArray = {"unused"};
+      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeBonus.data",
+        "{0}", unusedArray, unusedArray)));
+      // loop them
+      for (int loopCount = 0; loopCount < numberOfAttributes; loopCount++)
+      {
+        // get the name of the attribute
+        string AtributeNameText = RandomWeightedRoller("0", LoadDictionaryTableFromFile(
+          "NPCMaker.NotableAttributeStat.data",
+          "{0}", unusedArray, unusedArray));
+        // get the bonus
+        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", LoadDictionaryTableFromFile(
+          "NPCMaker.NotableAttributeBonus.data",
+          "{0}", unusedArray, unusedArray)));
+        // add it to the return string
+        if (AtributeNameText != "-no-")
+        {
+          RandomNotableAttributePositiveText += $"[{AtributeNameText}: +{AtributeNameBonus}]";
+        }
+      } // end for-loopCount
+
+      // done looping, so return data
+      if (3 < RandomNotableAttributePositiveText.Length)
+      {
+        RandomNotableAttributePositiveText = "Particularly Good At: {RandomNotableAttributePositiveText}";
+      }
+
+      return RandomNotableAttributePositiveText;
+    } // end method RandomNotableAttributePositive
 
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
