@@ -381,7 +381,7 @@ namespace PBHouse_CLI
       string RandomNotableAttributePositiveText = "";
 
       // roll how many attributes there are
-      string[] unusedArray = {"unused"};
+      string[] unusedArray = {};
       int numberOfAttributes = int.Parse(RandomWeightedRoller("0", LoadDictionaryTableFromFile(
         "NPCMaker.NotableAttributeBonus.data",
         "{0}", unusedArray, unusedArray)));
