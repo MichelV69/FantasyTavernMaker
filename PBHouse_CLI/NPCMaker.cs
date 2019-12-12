@@ -406,5 +406,43 @@ namespace PBHouse_CLI
       return RandomNotableAttributePositiveText;
     } // end method RandomNotableAttributePositive
 
+    private string getNotableAttributeNegative()
+    {
+      string RandomNotableAttributeNegativeText = "";
+      string[] unusedArray = {};
+      Dictionary<string, int> NotableAttributeBonus = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeBonus.data",
+        "{0}", unusedArray, unusedArray);
+      Dictionary<string, int> NotableAttributeStat = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeStat.data",
+        "{0}", unusedArray, unusedArray);
+
+      // we would rather fewer "bad" NPCs, so we're going to dope the table
+      if (NotableAttributeStat.ContainsKey("-no-"))
+      {
+        NotableAttributeStat["-no-"] = NotableAttributeStat["-no-"]* 2;
+      }
+
+      // we further don't want them "bad" at their _prinary job_
+      NotableAttributeStat.Remove("(Var) Trade Skill");
+
+      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+      for (int loopCount = 0; loopCount < numberOfAttributes; loopCount++)
+      {
+        string AtributeNameText = RandomWeightedRoller("0", NotableAttributeStat);
+        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+        if (AtributeNameText != "-no-")
+        {
+          RandomNotableAttributeNegativeText += $"[{AtributeNameText}: -{AtributeNameBonus}]";
+        }
+      } // end for-loopCount
+
+      if (3 < RandomNotableAttributeNegativeText.Length)
+      {
+        RandomNotableAttributeNegativeText = $"Particularly Bad At: {RandomNotableAttributeNegativeText}";
+      }
+
+      return RandomNotableAttributeNegativeText;
+    } // end method RandomNotableAttributeNegative
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
