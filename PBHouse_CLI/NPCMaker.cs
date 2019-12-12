@@ -116,7 +116,7 @@ namespace PBHouse_CLI
       QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
 
       NotableAttributePositive = getNotableAttributePositive();
-      // NotableAttributeNegative
+      NotableAttributeNegative = getNotableAttributeNegative();
 
       // SchtickAbilityDescription
     }
@@ -152,7 +152,7 @@ namespace PBHouse_CLI
         quirkText = $"(Quirks:  {qpText} {qeText})";
       }
 
-      string invisible = $"[GM Notes: {socText} {quirkText} {NotableAttributePositive}]";
+      string invisible = $"[GM Notes: {socText} {quirkText} {NotableAttributePositive} {NotableAttributeNegative}]";
       string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
