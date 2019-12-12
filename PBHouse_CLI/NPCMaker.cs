@@ -152,7 +152,7 @@ namespace PBHouse_CLI
         quirkText = $"(Quirks:  {qpText} {qeText})";
       }
 
-      string invisible = $"[{PublicName} Notes: {socText} {quirkText} {NotableAttributePositive}]";
+      string invisible = $"[GM Notes: {socText} {quirkText} {NotableAttributePositive}]";
       string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
