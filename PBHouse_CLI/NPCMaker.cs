@@ -379,31 +379,25 @@ namespace PBHouse_CLI
     private string getNotableAttributePositive()
     {
       string RandomNotableAttributePositiveText = "";
-
-      // roll how many attributes there are
       string[] unusedArray = {};
-      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", LoadDictionaryTableFromFile(
+      Dictionary<string, int> NotableAttributeBonus = LoadDictionaryTableFromFile(
         "NPCMaker.NotableAttributeBonus.data",
-        "{0}", unusedArray, unusedArray)));
-      // loop them
+        "{0}", unusedArray, unusedArray);
+      Dictionary<string, int> NotableAttributeStat = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeStat.data",
+        "{0}", unusedArray, unusedArray);
+
+      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
       for (int loopCount = 0; loopCount < numberOfAttributes; loopCount++)
       {
-        // get the name of the attribute
-        string AtributeNameText = RandomWeightedRoller("0", LoadDictionaryTableFromFile(
-          "NPCMaker.NotableAttributeStat.data",
-          "{0}", unusedArray, unusedArray));
-        // get the bonus
-        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", LoadDictionaryTableFromFile(
-          "NPCMaker.NotableAttributeBonus.data",
-          "{0}", unusedArray, unusedArray)));
-        // add it to the return string
+        string AtributeNameText = RandomWeightedRoller("0", NotableAttributeStat);
+        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
         if (AtributeNameText != "-no-")
         {
           RandomNotableAttributePositiveText += $"[{AtributeNameText}: +{AtributeNameBonus}]";
         }
       } // end for-loopCount
 
-      // done looping, so return data
       if (3 < RandomNotableAttributePositiveText.Length)
       {
         RandomNotableAttributePositiveText = $"Particularly Good At: {RandomNotableAttributePositiveText}";
