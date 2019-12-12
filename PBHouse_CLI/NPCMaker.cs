@@ -406,7 +406,7 @@ namespace PBHouse_CLI
       // done looping, so return data
       if (3 < RandomNotableAttributePositiveText.Length)
       {
-        RandomNotableAttributePositiveText = "Particularly Good At: {RandomNotableAttributePositiveText}";
+        RandomNotableAttributePositiveText = $"Particularly Good At: {RandomNotableAttributePositiveText}";
       }
 
       return RandomNotableAttributePositiveText;
