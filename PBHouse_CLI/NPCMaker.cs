@@ -318,14 +318,18 @@ namespace PBHouse_CLI
 
         if (textValue != "-no-")
         {
-          int detailArray1Index = diceBag.RawRoll1To(DetailArray1.Count() - 1);
-          string detailString1 = DetailArray1[detailArray1Index];
+          string detailString1 = "";
           string detailString2 = "";
 
+          if (DetailArray1.Any())
+          {
+            int detailArrayIndex = diceBag.RawRoll1To(DetailArray1.Count() - 1);
+            detailString1 = DetailArray1[detailArrayIndex];
+          }
           if (DetailArray2.Any())
           {
-            int detailArray2Index = diceBag.RawRoll1To(DetailArray2.Count() - 1);
-            detailString2 = DetailArray2[detailArray2Index];
+            int detailArrayIndex = diceBag.RawRoll1To(DetailArray2.Count() - 1);
+            detailString2 = DetailArray2[detailArrayIndex];
           }
 
           textValue = string.Format(DetailFormatString, textValue, detailString1,
