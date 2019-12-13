@@ -8,7 +8,7 @@ namespace PBHouse_CLI
   class NPCMaker
   {
     // --- static properties
-    private static string[] TypeCodeList = {"Staff", "Warrior", "Spell-Caster", "Noble", "Merchant"};
+    private static string[] TypeCodeList = {"Staff", "Patron"};
     private static string[] GenderCodeList = {"male", "female", "androgenous"};
 
     private Dictionary<string, int> RacialDistribution =
@@ -25,12 +25,13 @@ namespace PBHouse_CLI
 
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
+
     // --- variable properties
     private int TypeCode { get; set; }
     private string SexualOrientationText { get; set; }
     private int GenderCode { get; set; }
     private string PublicName { get; set; }
-    private string TaskDesc { get; set; }
+    public string TaskDesc { get; set; }
     private string Race { get; set; }
     private string HeightDesc { get; set; }
     private string BuildDesc { get; set; }
@@ -125,7 +126,13 @@ namespace PBHouse_CLI
     {
       // do some new do with the here do
 
-      string visible = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
+      string word = "the";
+      if (TypeCode > 0)
+      {
+        word = "a";
+      }
+
+      string visible = $"{getTypeCodeText()} : {PublicName} is {word} {TaskDesc}. "
         + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
         + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
 
@@ -444,5 +451,15 @@ namespace PBHouse_CLI
 
       return RandomNotableAttributeNegativeText;
     } // end method RandomNotableAttributeNegative
+
+    public string getRandomTaskDesc()
+    {
+      string[] unusedArray = {};
+      Dictionary<string, int> RandomTaskDescList = LoadDictionaryTableFromFile(
+        "NPCMaker.RandomTaskDescList.data",
+        "{0}", unusedArray, unusedArray);
+
+      return diceBag.SearchStringForRolls(RandomWeightedRoller("Barony's Most Interesting Person", RandomTaskDescList));
+    }
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI
