@@ -18,16 +18,22 @@ namespace PBHouse_CLI
   {
     public static int MaxTextWidthCols = 80;
     public static string MyAppName = "Fantasy Tavern Maker";
+    private bool JustNPCList = false;
+    private int MaxNumberToMake = 1;
 
     // -----
     public static void Main(string[] args)
     {
         var do_again = true;
-        int loop_max = 1;
 
         if (args.Length != 0)
         {
-            loop_max = int.Parse(args[0]);
+            args.Split(' ').ForEach(thisArg =>{
+              if(thisArg.Contains("--count="))
+                MaxNumberToMake = Int16.Parse(thisArg.Split('=').Last());
+              if(thisArg.Contains("--JustNPCs="))
+                JustNPCList = Boolean.Parse(thisArg.Split('=').Last());
+            });
         }
 
         int AbsoLooply = 0;
@@ -42,7 +48,7 @@ namespace PBHouse_CLI
             PBHouse pbh = new PBHouse();
             WordWrap ww = new WordWrap();
             DiceBagEngine diceBag = new DiceBagEngine();
-            for (int loop = 1; loop <= loop_max; loop++)
+            for (int loop = 1; loop <= MaxNumberToMake; loop++)
             {
               AbsoLooply++;
               // ---- create an example PBHouse
@@ -117,7 +123,7 @@ namespace PBHouse_CLI
             var wait_on_valid_input = true;
             while (wait_on_valid_input)
             {
-                Console.WriteLine($"Press [ESC] to exit, or [SPACE] to generate {loop_max} more.");
+                Console.WriteLine($"Press [ESC] to exit, or [SPACE] to generate {MaxNumberToMake} more.");
                 var user_keypress = Console.ReadKey();
                 if (user_keypress.Key == ConsoleKey.Escape)
                 {
