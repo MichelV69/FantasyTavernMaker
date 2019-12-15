@@ -8,7 +8,7 @@ namespace PBHouse_CLI
   class NPCMaker
   {
     // --- static properties
-    private static string[] TypeCodeList = {"Staff", "Warrior", "Spell-Caster", "Noble", "Merchant"};
+    private static string[] TypeCodeList = {"Staff", "Patron"};
     private static string[] GenderCodeList = {"male", "female", "androgenous"};
 
     private Dictionary<string, int> RacialDistribution =
@@ -25,12 +25,13 @@ namespace PBHouse_CLI
 
     // --- other class includes
     private DiceBagEngine diceBag = new DiceBagEngine();
+
     // --- variable properties
     private int TypeCode { get; set; }
     private string SexualOrientationText { get; set; }
     private int GenderCode { get; set; }
     private string PublicName { get; set; }
-    private string TaskDesc { get; set; }
+    public string TaskDesc { get; set; }
     private string Race { get; set; }
     private string HeightDesc { get; set; }
     private string BuildDesc { get; set; }
@@ -100,10 +101,13 @@ namespace PBHouse_CLI
     public void RandomDetails()
     {
       // do some new do with the here do
+      Race  = RandomWeightedRoller("Human*", RacialDistribution);
+
       HeightDesc  = getRandomHeightDesc();
       BuildDesc   = getRandomBuildDesc();
+
       GenderCode  = getRandomGenderCode();
-      Race  = RandomWeightedRoller("Human*", RacialDistribution);
+      SexualOrientationText = RandomWeightedRoller("mind your own affairs, thanks", SexualOrientationTextTableReader());
 
       EyeColor   =  RandomWeightedRoller("Blue*", EyeColorTable);
       HairColor  =  RandomWeightedRoller("Chestnut*", HairColorTable);
@@ -111,9 +115,10 @@ namespace PBHouse_CLI
 
       QuirkEmotional = RandomWeightedRoller("just fine, thanks", QuirkEmotionalTableReader());
       QuirkPhysical = RandomWeightedRoller("just fine, thanks", QuirkPhysicalTableReader());
-      // NotableAttributePositive
-      // NotableAttributeNegative
-      SexualOrientationText = RandomWeightedRoller("mind your own affairs, thanks", SexualOrientationTextTableReader());
+
+      NotableAttributePositive = getNotableAttributePositive();
+      NotableAttributeNegative = getNotableAttributeNegative();
+
       // SchtickAbilityDescription
     }
 
@@ -121,9 +126,21 @@ namespace PBHouse_CLI
     {
       // do some new do with the here do
 
-      string visible = $"{getTypeCodeText()} : {PublicName} is the {TaskDesc}. "
+      string word = "the";
+      if (TypeCode > 0)
+      {
+        word = "a";
+      }
+
+      string visible = $"{getTypeCodeText()} : {PublicName} is {word} {TaskDesc}. "
         + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
         + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
+
+      string socText = "";
+      if (SexualOrientationText != "-no-")
+      {
+        socText = $"They {SexualOrientationText}. ";
+      }
 
       string qpText = "";
       if (QuirkPhysical != "-no-")
@@ -135,19 +152,14 @@ namespace PBHouse_CLI
       {
         qeText = $"They {QuirkEmotional}. ";
       }
-      string socText = "";
-      if (SexualOrientationText != "-no-")
-      {
-        socText = $"They {SexualOrientationText}. ";
-      }
 
       string quirkText = "";
-      if ( (qpText+qeText).Length > 3)
+      if ( (qpText + qeText).Length > 3)
       {
-        quirkText = $"(Quirks:  {qpText} {qeText} )";
+        quirkText = $"(Quirks:  {qpText} {qeText})";
       }
 
-      string invisible = $"[{PublicName} Notes: {socText} {quirkText}]";
+      string invisible = $"[GM Notes: {socText} {quirkText} {NotableAttributePositive} {NotableAttributeNegative}]";
       string paragraph = $"{visible}\n{invisible}";
       return paragraph;
     }
@@ -299,83 +311,155 @@ namespace PBHouse_CLI
 
     } // end method RandomWeightedRoller
 
-    private Dictionary<string, int> QuirkPhysicalTableReader()
+    private Dictionary<string, int> LoadDictionaryTableFromFile(string FileToLoad,  string DetailFormatString, string[] DetailArray1,
+      string[] DetailArray2)
     {
-      Dictionary<string, int> QuirkPhysicalTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkPhysicalTable.data");
+      Dictionary<string, int> dictionaryTableFromFile = new Dictionary<string, int>();
+      string fileToLoad = Path.Combine(Environment.CurrentDirectory, $"table_data/{FileToLoad}");
       List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
 
-      string[] sideName = {"left", "right"};
-      string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
       fileData.ForEach(line =>
       {
         int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
+        string textValue = line.Split('|').Last().Trim();
 
         if (textValue != "-no-")
         {
-          int sideIndex = diceBag.RawRoll1To(sideName.Count() - 1);
-          int locationIndex = diceBag.RawRoll1To(locationNames.Count() - 1);
-          textValue = $"{textValue} on their {sideName[sideIndex]} {locationNames[locationIndex]}";
+          string detailString1 = "";
+          string detailString2 = "";
+
+          if (DetailArray1.Any())
+          {
+            int detailArrayIndex = diceBag.RawRoll1To(DetailArray1.Count() - 1);
+            detailString1 = DetailArray1[detailArrayIndex];
+          }
+          if (DetailArray2.Any())
+          {
+            int detailArrayIndex = diceBag.RawRoll1To(DetailArray2.Count() - 1);
+            detailString2 = DetailArray2[detailArrayIndex];
+          }
+
+          textValue = string.Format(DetailFormatString, textValue, detailString1,
+            detailString2);
         }
 
-        QuirkPhysicalTable.Add(textValue, rollWeight);
+        dictionaryTableFromFile.Add(textValue, rollWeight);
       });
 
-      return QuirkPhysicalTable;
+      return dictionaryTableFromFile;
+    } // end method LoadDictionaryTableFromFile
+
+    private Dictionary<string, int> QuirkPhysicalTableReader()
+    {
+      string fileToLoad = "NPCMaker.QuirkPhysicalTable.data";
+      string detailFormatString = "{0} on their {1} {2}";
+      string[] sideName = {"left", "right"};
+      string[] locationNames = {"hand", "forearm", "upper arm", "shoulder", "cheek", "leg", "thigh", "collar-bone", "brow" };
+
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, sideName, locationNames);
     } // end method QuirkPhysicalTableReader
 
     private Dictionary<string, int> QuirkEmotionalTableReader()
     {
-      Dictionary<string, int> QuirkEmotionalTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.QuirkEmotionalTable.data");
-      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
-
+      string fileToLoad = "NPCMaker.QuirkEmotionalTable.data";
+      string detailFormatString = "{1} {0}";
       string[] prepPhrase = {"can sometimes be", "are often", "tend to be"};
-      fileData.ForEach(line =>
-      {
-        int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
+      string[] unused = { };
 
-        if (textValue != "-no-")
-        {
-          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
-          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
-        }
-
-        QuirkEmotionalTable.Add(textValue, rollWeight);
-      });
-
-      return QuirkEmotionalTable;
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, prepPhrase, unused);
     } // end method QuirkEmotionalTableReader
 
     private Dictionary<string, int> SexualOrientationTextTableReader()
     {
-      Dictionary<string, int> SexualOrientationTextTable = new Dictionary<string, int>();
-      string fileToLoad = Path.Combine(Environment.CurrentDirectory, "table_data/NPCMaker.SexualOrientationTextList.data");
-      List<string> fileData = File.ReadAllLines(fileToLoad).ToList();
-
+      string fileToLoad = "NPCMaker.SexualOrientationTextList.data";
+      string detailFormatString = "{1} {0}";
+      string[] unused = { };
       string[] prepPhrase =
       {
         "are quietly", "are flirtatiously", "consider themselves", "consider themselves", "consider themselves",
         "consider themselves"
       };
-      fileData.ForEach(line =>
-      {
-        int rollWeight = Int32.Parse(line.Split('|').First());
-        string textValue = line.Split('|').Last().TrimStart(' ');
 
-        if (textValue != "-no-")
-        {
-          int phraseIndex = diceBag.RawRoll1To(prepPhrase.Count() - 1);
-          textValue = $"{prepPhrase[phraseIndex]} {textValue}";
-        }
-
-        SexualOrientationTextTable.Add(textValue, rollWeight);
-      });
-
-      return SexualOrientationTextTable;
+      return LoadDictionaryTableFromFile(fileToLoad, detailFormatString, prepPhrase, unused);
     } // end method QuirkEmotionalTableReader
 
+    private string getNotableAttributePositive()
+    {
+      string RandomNotableAttributePositiveText = "";
+      string[] unusedArray = {};
+      Dictionary<string, int> NotableAttributeBonus = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeBonus.data",
+        "{0}", unusedArray, unusedArray);
+      Dictionary<string, int> NotableAttributeStat = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeStat.data",
+        "{0}", unusedArray, unusedArray);
+
+      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+      for (int loopCount = 0; loopCount < numberOfAttributes; loopCount++)
+      {
+        string AtributeNameText = RandomWeightedRoller("0", NotableAttributeStat);
+        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+        if (AtributeNameText != "-no-")
+        {
+          RandomNotableAttributePositiveText += $"[{AtributeNameText}: +{AtributeNameBonus}]";
+        }
+      } // end for-loopCount
+
+      if (3 < RandomNotableAttributePositiveText.Length)
+      {
+        RandomNotableAttributePositiveText = $"Particularly Good At: {RandomNotableAttributePositiveText}";
+      }
+
+      return RandomNotableAttributePositiveText;
+    } // end method RandomNotableAttributePositive
+
+    private string getNotableAttributeNegative()
+    {
+      string RandomNotableAttributeNegativeText = "";
+      string[] unusedArray = {};
+      Dictionary<string, int> NotableAttributeBonus = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeBonus.data",
+        "{0}", unusedArray, unusedArray);
+      Dictionary<string, int> NotableAttributeStat = LoadDictionaryTableFromFile(
+        "NPCMaker.NotableAttributeStat.data",
+        "{0}", unusedArray, unusedArray);
+
+      // we would rather fewer "bad" NPCs, so we're going to dope the table
+      if (NotableAttributeStat.ContainsKey("-no-"))
+      {
+        NotableAttributeStat["-no-"] = NotableAttributeStat["-no-"]* 2;
+      }
+
+      // we further don't want them "bad" at their _prinary job_
+      NotableAttributeStat.Remove("(Var) Trade Skill");
+
+      int numberOfAttributes = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+      for (int loopCount = 0; loopCount < numberOfAttributes; loopCount++)
+      {
+        string AtributeNameText = RandomWeightedRoller("0", NotableAttributeStat);
+        int AtributeNameBonus = int.Parse(RandomWeightedRoller("0", NotableAttributeBonus));
+        if (AtributeNameText != "-no-")
+        {
+          RandomNotableAttributeNegativeText += $"[{AtributeNameText}: -{AtributeNameBonus}]";
+        }
+      } // end for-loopCount
+
+      if (3 < RandomNotableAttributeNegativeText.Length)
+      {
+        RandomNotableAttributeNegativeText = $"Particularly Bad At: {RandomNotableAttributeNegativeText}";
+      }
+
+      return RandomNotableAttributeNegativeText;
+    } // end method RandomNotableAttributeNegative
+
+    public string getRandomTaskDesc()
+    {
+      string[] unusedArray = {};
+      Dictionary<string, int> RandomTaskDescList = LoadDictionaryTableFromFile(
+        "NPCMaker.RandomTaskDescList.data",
+        "{0}", unusedArray, unusedArray);
+
+      return diceBag.SearchStringForRolls(RandomWeightedRoller("Barony's Most Interesting Person", RandomTaskDescList));
+    }
   } // end class NPCMaker
 }  // end namespace PBHouse_CLI

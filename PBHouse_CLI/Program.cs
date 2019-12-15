@@ -87,11 +87,14 @@ namespace PBHouse_CLI
               NPCMaker NPC_Owner = new NPCMaker("Staff", "Owner") ;
               NPC_Owner.RandomDetails();
 
+              int patronHeadCount = diceBag.RollDice("2d4-6");
+
               Console.WriteLine("\n " + DashLineText("Notable Staff & Patrons"));
               Console.WriteLine(ww.doWordWrap( NPC_Owner.toString(), MaxTextWidthCols));
 
               if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
               {
+                patronHeadCount++;
                 NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
                 NPC_Cook.RandomDetails();
                 Console.WriteLine( "\n " + ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
@@ -100,6 +103,7 @@ namespace PBHouse_CLI
               // "modest", "large", "massive"
               if (size.Contains("large") || size.Contains("massive"))
               {
+                patronHeadCount++;
                 NPCMaker NPC_HeadServer = new NPCMaker("Staff", "Head Server") ;
                 NPC_HeadServer.RandomDetails();
                 Console.WriteLine( "\n " + ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
@@ -107,9 +111,18 @@ namespace PBHouse_CLI
 
               if (size.Contains("massive"))
               {
+                patronHeadCount++;
                 NPCMaker NPC_Bouncer = new NPCMaker("Staff", "Bouncer") ;
                 NPC_Bouncer.RandomDetails();
                 Console.WriteLine( "\n " + ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
+              }
+
+              for (int patronLoop = 0; patronLoop < patronHeadCount; patronLoop++)
+              {
+                NPCMaker NPC_Patron = new NPCMaker("Patron", "Random");
+                NPC_Patron.RandomDetails();
+                NPC_Patron.TaskDesc = NPC_Patron.getRandomTaskDesc();
+                Console.WriteLine( "\n " + ww.doWordWrap( NPC_Patron.toString(), MaxTextWidthCols));
               }
 
               Console.WriteLine("\n" + DashLineText("DM Notes") );
