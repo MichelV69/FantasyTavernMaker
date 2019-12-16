@@ -8,8 +8,8 @@ namespace PBHouse_CLI
   class NPCMaker
   {
     // --- static properties
-    private static string[] TypeCodeList = {"Staff", "Patron"};
-    private static string[] GenderCodeList = {"male", "female", "androgenous"};
+    private static string[] TypeCodeList = {"Staff", "Patron", "Story Character"};
+    private static string[] GenderCodeList = {"male", "female", "androgynous"};
 
     private Dictionary<string, int> RacialDistribution =
     new Dictionary<string, int>();
