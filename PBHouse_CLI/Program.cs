@@ -19,7 +19,7 @@ namespace PBHouse_CLI
     public static int MaxTextWidthCols = 80;
     public static string MyAppName = "Fantasy Tavern Maker";
     public static string StockDashedLine = "------   ------   ------";
-    
+
     // -----
     public static void Main(string[] args)
     {
@@ -38,7 +38,7 @@ namespace PBHouse_CLI
       Console.WriteLine($"\n Just build an NPC List? [true / false, Default:{JustNPCList}]");
       string npc_only = Console.ReadLine();
       if (!String.IsNullOrEmpty(npc_only))
-        JustNPCList = Boolean.Parse(batch_size);
+        JustNPCList = Boolean.Parse(npc_only);
 
       var do_again = true;
       int AbsoLooply = 0;
@@ -47,89 +47,19 @@ namespace PBHouse_CLI
           PrepConsole();
           Console.WriteLine(DashLineText(titleText));
 
-          PBHouse pbh = new PBHouse();
           WordWrap ww = new WordWrap();
           DiceBagEngine diceBag = new DiceBagEngine();
           for (int loop = 1; loop <= MaxNumberToMake; loop++)
           {
             AbsoLooply++;
-            // ---- create an example PBHouse
-            var name = pbh.Name();
-            var quality_list = pbh.EstablishmentQuality(); // quality, rooms_cost, meals_cost
-            var mood = pbh.Mood();
-            var lights = pbh.Lighting();
-            var smells = pbh.Smells();
-            var size = pbh.Size();
-            var posted_sign = diceBag.SearchStringForRolls(pbh.PostedSign());
-            var drinks = diceBag.SearchStringForRolls(pbh.SpecialtyDrink(quality_list.Item1));
-            var foods = diceBag.SearchStringForRolls(pbh.SpecialtyFood(quality_list.Item1));
-            var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
-            var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
-
-            // --- summary blurb output
-            string FormatedAbsoLooply = String.Format("{0,2:d2}", AbsoLooply);
-            Console.WriteLine(DashLineText( $"--[{FormatedAbsoLooply}]--" ));
-            Console.WriteLine("\n" + DashLineText("Player Blurb"));
-
-            var desc_line1 = $"  The local Pub and Bed House for travellers is the {name}." +
-                              $" The {quality_list.Item1}-quality establishment would be considered {size}." +
-                              $" Rooms are {quality_list.Item2} per day, and meals are {quality_list.Item3} per day.";
-
-            var desc_line2 = $"\n  As you enter, you smell {smells}. It seems to be a {mood} place, {lights}." +
-                              $" A sign {posted_sign}.";
-
-            var desc_line3 = "\n  The menu has the usual standard fare posted. " +
-                              $"The House Specialty Drink is {drinks}, while the House Specialty Meal is {foods}.";
-
-            Console.WriteLine(ww.doWordWrap(desc_line1, MaxTextWidthCols));
-            Console.WriteLine(ww.doWordWrap(desc_line2, MaxTextWidthCols));
-            Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
-
-            // --- new feature;  staff and patron NPCs
-            NPCMaker NPC_Owner = new NPCMaker("Staff", "Owner") ;
-            NPC_Owner.RandomDetails();
-
-            int patronHeadCount = diceBag.RollDice("2d4-6");
-
-            Console.WriteLine("\n " + DashLineText("Notable Staff & Patrons"));
-            Console.WriteLine(ww.doWordWrap( NPC_Owner.toString(), MaxTextWidthCols));
-
-            if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
+            if (JustNPCList)
             {
-              patronHeadCount++;
-              NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
-              NPC_Cook.RandomDetails();
-              Console.WriteLine( "\n " + ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
+              Console.WriteLine("Just NPC");
             }
-
-            // "modest", "large", "massive"
-            if (size.Contains("large") || size.Contains("massive"))
+            else
             {
-              patronHeadCount++;
-              NPCMaker NPC_HeadServer = new NPCMaker("Staff", "Head Server") ;
-              NPC_HeadServer.RandomDetails();
-              Console.WriteLine( "\n " + ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
+              CreateOneRandomPBHouse(diceBag, ww, AbsoLooply);
             }
-
-            if (size.Contains("massive"))
-            {
-              patronHeadCount++;
-              NPCMaker NPC_Bouncer = new NPCMaker("Staff", "Bouncer") ;
-              NPC_Bouncer.RandomDetails();
-              Console.WriteLine( "\n " + ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
-            }
-
-            for (int patronLoop = 0; patronLoop < patronHeadCount; patronLoop++)
-            {
-              NPCMaker NPC_Patron = new NPCMaker("Patron", "Random");
-              NPC_Patron.RandomDetails();
-              NPC_Patron.TaskDesc = NPC_Patron.getRandomTaskDesc();
-              Console.WriteLine( "\n " + ww.doWordWrap( NPC_Patron.toString(), MaxTextWidthCols));
-            }
-
-            Console.WriteLine("\n" + DashLineText("DM Notes") );
-            Console.WriteLine(ww.doWordWrap($"Establishment History: {history}", MaxTextWidthCols));
-            Console.WriteLine(ww.doWordWrap($"Red Light Services: {naughty}", MaxTextWidthCols));
 
           } // end-for
 
@@ -159,11 +89,10 @@ namespace PBHouse_CLI
     private static void PrepConsole()
     {
       if (Console.BackgroundColor == ConsoleColor.Black)
-        {
-          Console.BackgroundColor = ConsoleColor.Gray;
-          Console.ForegroundColor = ConsoleColor.DarkBlue;
-
-        }
+      {
+        Console.BackgroundColor = ConsoleColor.Gray;
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+      }
         Console.Clear();
 
     } // end method PrepConsole
@@ -184,6 +113,92 @@ namespace PBHouse_CLI
       }
       return $"{LeadingGap}{Dashes}{OffsetString}{TextToDisplay}{OffsetString}{Dashes}";
     } // end method DashLineText
+
+    // -----
+    private static void CreateOneRandomPBHouse(DiceBagEngine diceBag, WordWrap ww, int AbsoLooply)
+    {
+      // ---- create an example P3BHouse
+      PBHouse pbh = new PBHouse();
+
+      var name = pbh.Name();
+      var quality_list = pbh.EstablishmentQuality(); // quality, rooms_cost, meals_cost
+      var mood = pbh.Mood();
+      var lights = pbh.Lighting();
+      var smells = pbh.Smells();
+      var size = pbh.Size();
+      var posted_sign = diceBag.SearchStringForRolls(pbh.PostedSign());
+      var drinks = diceBag.SearchStringForRolls(pbh.SpecialtyDrink(quality_list.Item1));
+      var foods = diceBag.SearchStringForRolls(pbh.SpecialtyFood(quality_list.Item1));
+      var history = diceBag.SearchStringForRolls(pbh.EstablishmentHistory());
+      var naughty = diceBag.SearchStringForRolls(pbh.RedLightServices());
+
+      // --- summary blurb output
+      string FormatedAbsoLooply = String.Format("{0,2:d2}", AbsoLooply);
+      Console.WriteLine(DashLineText( $"--[{FormatedAbsoLooply}]--" ));
+      Console.WriteLine("\n" + DashLineText("Player Blurb"));
+
+      var desc_line1 = $"  The local Pub and Bed House for travellers is the {name}." +
+                        $" The {quality_list.Item1}-quality establishment would be considered {size}." +
+                        $" Rooms are {quality_list.Item2} per day, and meals are {quality_list.Item3} per day.";
+
+      var desc_line2 = $"\n  As you enter, you smell {smells}. It seems to be a {mood} place, {lights}." +
+                        $" A sign {posted_sign}.";
+
+      var desc_line3 = "\n  The menu has the usual standard fare posted. " +
+                        $"The House Specialty Drink is {drinks}, while the House Specialty Meal is {foods}.";
+
+      Console.WriteLine(ww.doWordWrap(desc_line1, MaxTextWidthCols));
+      Console.WriteLine(ww.doWordWrap(desc_line2, MaxTextWidthCols));
+      Console.WriteLine(ww.doWordWrap(desc_line3, MaxTextWidthCols));
+
+      // --- new feature;  staff and patron NPCs
+      NPCMaker NPC_Owner = new NPCMaker("Staff", "Owner") ;
+      NPC_Owner.RandomDetails();
+
+      int patronHeadCount = diceBag.RollDice("2d4-6");
+
+      Console.WriteLine("\n " + DashLineText("Notable Staff & Patrons"));
+      Console.WriteLine(ww.doWordWrap( NPC_Owner.toString(), MaxTextWidthCols));
+
+      if (size.Contains("modest") || size.Contains("large") || size.Contains("massive"))
+      {
+        patronHeadCount++;
+        NPCMaker NPC_Cook = new NPCMaker("Staff", "Cook") ;
+        NPC_Cook.RandomDetails();
+        Console.WriteLine( "\n " + ww.doWordWrap( NPC_Cook.toString(), MaxTextWidthCols));
+      }
+
+      // "modest", "large", "massive"
+      if (size.Contains("large") || size.Contains("massive"))
+      {
+        patronHeadCount++;
+        NPCMaker NPC_HeadServer = new NPCMaker("Staff", "Head Server") ;
+        NPC_HeadServer.RandomDetails();
+        Console.WriteLine( "\n " + ww.doWordWrap( NPC_HeadServer.toString(), MaxTextWidthCols));
+      }
+
+      if (size.Contains("massive"))
+      {
+        patronHeadCount++;
+        NPCMaker NPC_Bouncer = new NPCMaker("Staff", "Bouncer") ;
+        NPC_Bouncer.RandomDetails();
+        Console.WriteLine( "\n " + ww.doWordWrap( NPC_Bouncer.toString(), MaxTextWidthCols));
+      }
+
+      for (int patronLoop = 0; patronLoop < patronHeadCount; patronLoop++)
+      {
+        NPCMaker NPC_Patron = new NPCMaker("Patron", "Random");
+        NPC_Patron.RandomDetails();
+        NPC_Patron.TaskDesc = NPC_Patron.getRandomTaskDesc();
+        Console.WriteLine( "\n " + ww.doWordWrap( NPC_Patron.toString(), MaxTextWidthCols));
+      }
+
+      Console.WriteLine("\n" + DashLineText("DM Notes") );
+      Console.WriteLine(ww.doWordWrap($"Establishment History: {history}", MaxTextWidthCols));
+      Console.WriteLine(ww.doWordWrap($"Red Light Services: {naughty}", MaxTextWidthCols));
+
+    } // end CreateOneRandomPBHouse
+
   }  // end class MainClass
 } // namespace PBHouse_CLI
 // ----- end of file -----
