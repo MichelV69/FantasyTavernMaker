@@ -54,7 +54,10 @@ namespace PBHouse_CLI
             AbsoLooply++;
             if (JustNPCList)
             {
-              Console.WriteLine("Just NPC");
+              NPCMaker RandomNPC = new NPCMaker("Story Character", "Random");
+              RandomNPC.RandomDetails();
+              RandomNPC.TaskDesc = RandomNPC.getRandomTaskDesc();
+              Console.WriteLine( "\n " + ww.doWordWrap(  String.Format("[#{0,2:d2}] ", AbsoLooply) + RandomNPC.toString(), MaxTextWidthCols));
             }
             else
             {
