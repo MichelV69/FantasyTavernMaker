@@ -132,7 +132,14 @@ namespace PBHouse_CLI
         word = "a";
       }
 
-      string visible = $"{getTypeCodeText()} : {PublicName} is {word} {TaskDesc}. "
+      string patronInfoText = getTypeCodeText();
+      if (TypeCode == 1)
+      {
+        int odds_here = Math.Max(diceBag.RollDice("1d8-1"),1);
+        patronInfoText = $"Regular {getTypeCodeText()} (visiting: {odds_here} in 8)";
+      }
+
+      string visible = $"{patronInfoText} : {PublicName} is {word} {TaskDesc}. "
         + $"They are a {getGenderCodeText()} {Race}; {HeightDesc} and {BuildDesc}. "
         + $"They are {EyeColor}-eyed, with their {HairColor} hair kept {HairStyle}. ";
 
